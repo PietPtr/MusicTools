@@ -3,35 +3,38 @@
 class Main {
     constructor() {
         this.settings = {
-            activeOutputIndex: 0,
-            allowedCallClasses: []
+            activeOutputIndex: 1,
+            allowedFigureClasses: []
         }
-        this.activeOutput = WebMIDI.outputs.getOutputById(settings.activeOutputIndex);
+        this.activeOutput = WebMidi.outputs[this.settings.activeOutputIndex];
+        this.measure = 0;
+
+        console.log(this.activeOutput);
     }
 
-    loadMIDIContext() {
-        const onMIDISuccess = (midiAccess) => {
-            console.log("MIDI ready!");
-            this.midi = midiAccess;
-            this.activeOutput = this.midi.outputs.get(0); // TODO: make configurable
-            return new Promise((resolve, reject) => {
-                resolve('MIDI loaded')
-            })
-        }
-
-        const onMIDIFailure = (msg) => {
-            console.error(`Failed to get MIDI access - ${msg}`);
-        }
-
-        return navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+    measureTime() {
+        return measureToTime(this.measure);
     }
 
-    listOutputs() {
-        for (const entry of this.midi.outputs) {
-            const output = entry[1];
-            console.log(
-                `Output port [type:'${output.type}'] id:'${output.id}' manufacturer:'${output.manufacturer}' name:'${output.name}' version:'${output.version}'`
-            );
+    queueMeasure() {
+        const GenerateClass = choice(settings.generators);
+        const notes = GenerateClass.generate();
+
+        let time = 0;
+        for(let note of notes) {
+            // console.log(note);
+            this.activeOutput.playNote(note, {time: this.measureTime() + time});
+            time += note.duration;
+        }
+
+        this.queueMetronome(GenerateClass.measures * 2);
+        this.measure += GenerateClass.measures * 2;
+    }
+
+    queueMetronome(measures) {
+        const drumChannel = this.activeOutput.channels[10];
+        for (let tick of metronome(measures, 4, quarter)) {
+            drumChannel.playNote(tick.midiValue, {time: this.measureTime() + tick.time, attack: 1});
         }
     }
 }
