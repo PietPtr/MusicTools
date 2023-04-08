@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Example Domain</title>
+        <title>Call & Response</title>
 
         <meta charset="utf-8" />
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -47,20 +47,10 @@
     <body>
         <div>
             <h1>Call & Response Trainer</h1>
-            <table>
-                <tr>
-                    <td>Figure Style:</td>
-                    <td>KnownStartFigure</td>
-                </tr>
-                <tr>
-                    <td>Current Measure:</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Measures Left:</td>
-                    <td>0</td>
-                </tr>
-            </table>
+            <p>Figure: <span id=figure>...</span></p>
+            <p>Root: <span id=root>...</span></p>
+            <p>Tempo: <span id=tempo>...</span>BPM</p>
+            <button onclick="start();" style="width: 100px">Start</button>
         </div>
     </body>
 </html>

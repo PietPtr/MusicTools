@@ -11,8 +11,19 @@ function rest(duration) {
     return new Note("C2", {duration: noteDuration(duration), attack: 0});
 }
 
-class KnownStartRootFigure {
+class EmptyFigure {
     static measures = 1;
+    static settings = {};
+    static displayName = "No name found for figure";
+
+    static generate(seed) {
+        return [];
+    }
+}
+
+class KnownStartRootFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Known start note, one interval."
     static settings = {
         root: "C2",
         intervals: major
@@ -26,8 +37,9 @@ class KnownStartRootFigure {
     }
 }
 
-class KnownEndRootFigure {
+class KnownEndRootFigure extends EmptyFigure {
     static measures = 1;
+    static displayName = "Known last note, one interval.";
     static settings = {
         root: "C2",
         intervals: major
@@ -39,8 +51,9 @@ class KnownEndRootFigure {
     }
 }
 
-class ShortAscendingFigure {
+class ShortAscendingFigure extends EmptyFigure {
     static measures = 1;
+    static displayName = "Three note ascending figure.";
     static settings = {
         key: "C2",
         intervals: major
@@ -55,8 +68,9 @@ class ShortAscendingFigure {
     }
 }
 
-class EighthNoteRythmFigure {
+class EighthNoteRythmFigure extends EmptyFigure {
     static measures = 1;
+    static displayName = "Four note rythmic figure.";
     static settings = {
         key: "D2"
     }
