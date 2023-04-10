@@ -2180,7 +2180,7 @@
     static getNoteDetails(value) {
       if (Number.isInteger(value)) value = this.toNoteIdentifier(value);
       const matches = value.match(/^([CDEFGAB])(#{0,2}|b{0,2})(-?\d+)$/i);
-      if (!matches) throw new TypeError("Invalid note identifier");
+      if (!matches) throw new TypeError(`Invalid note identifier: ${value}`);
       const name = matches[1].toUpperCase();
       const octave = parseInt(matches[3]);
       let accidental = matches[2].toLowerCase();

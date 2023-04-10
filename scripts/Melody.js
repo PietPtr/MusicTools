@@ -86,3 +86,10 @@ class EighthNoteRythmFigure extends EmptyFigure {
     }
 }
 
+
+const classNames = {
+    "KnownStartRoot": KnownStartRootFigure,
+    "KnownEndRoot": KnownEndRootFigure,
+    "EighthNoteRythm": EighthNoteRythmFigure,
+    "ShortAscending": ShortAscendingFigure
+}

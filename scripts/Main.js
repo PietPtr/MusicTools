@@ -21,6 +21,8 @@ class Main {
         this.startTime = startTime;
 
         console.log(this.activeOutput);
+
+        this.activeOutput.sendProgramChange(settings.midiProgram)
     }
 
     addUIEvent(elementID, newValue, time) {

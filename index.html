@@ -16,12 +16,15 @@
                     sans-serif;
             }
             div {
-                width: 600px;
+                width: 800px;
                 margin: 5em auto;
                 padding: 2em;
                 background-color: #fdfdff;
                 border-radius: 0.5em;
                 box-shadow: 2px 3px 7px 2px rgba(0, 0, 0, 0.02);
+            }
+            #settings-div {
+                text-align: center;
             }
             a:link,
             a:visited {
@@ -35,6 +38,7 @@
                 }
             }
         </style>
+        <script src="./libs/js-yaml.min.js"></script>
         <script src="./libs/webmidi.iife.js"></script>
         <script src="./scripts/utils.js"></script>
         <script src="./scripts/Music.js"></script>
@@ -51,6 +55,26 @@
             <p>Root: <span id=root>...</span></p>
             <p>Tempo: <span id=tempo>...</span>BPM</p>
             <button onclick="start();" style="width: 100px">Start</button>
+        </div>
+        <div id="settings-div">
+            <textarea id="settings" cols="90", rows="20">
+global:
+  tempo: 100
+  root: C2
+  generators:
+    - EighthNoteRythm
+    - ShortAscending
+    - KnownStartRoot
+    - KnownEndRoot
+  amountOfFigures: 100
+  activeOutputIndex: 1
+  midiProgram: 33
+figures:
+  KnownStartRoot:
+    root: A1
+    intervals: minor
+            </textarea>
+            <button onclick="resetSettingsToDefaults();" style="width: 100px">Reset</button>
         </div>
     </body>
 </html>

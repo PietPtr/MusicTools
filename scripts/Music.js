@@ -17,6 +17,12 @@ const major7th = 11;
 const octave = 12;
 
 const major = [unison, major2nd, major3rd, fourth, fifth, major6th, major7th, octave];
+const minor = [unison, major2nd, minor3rd, fourth, fifth, minor6th, minor7th, octave];
+
+const scales = {
+    major: major,
+    minor: minor
+}
 
 const sixteenth = 1/16;
 const eighth = 1/8;
