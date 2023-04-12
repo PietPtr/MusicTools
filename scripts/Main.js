@@ -20,8 +20,6 @@ class Main {
         this.addUIEvent("tempo", settings.tempo, 0);
         this.startTime = startTime;
 
-        console.log(this.activeOutput);
-
         this.activeOutput.sendProgramChange(settings.midiProgram)
     }
 
@@ -44,7 +42,7 @@ class Main {
     }
 
     queueMeasure() {
-        const GenerateClass = choice(settings.generators);
+        const GenerateClass = choice(settings.figures);
         const notes = GenerateClass.generate();
 
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Call & Response</title>
+        <title>Ear Training</title>
 
         <meta charset="utf-8" />
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -15,16 +15,13 @@
                     "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial,
                     sans-serif;
             }
-            div {
-                width: 800px;
-                margin: 5em auto;
-                padding: 2em;
+            .example-div {
+                width: 600px;
+                margin: 1em;
+                padding: 1em;
                 background-color: #fdfdff;
                 border-radius: 0.5em;
                 box-shadow: 2px 3px 7px 2px rgba(0, 0, 0, 0.02);
-            }
-            #settings-div {
-                text-align: center;
             }
             a:link,
             a:visited {
@@ -37,6 +34,16 @@
                     width: auto;
                 }
             }
+            .midi-device {
+                font-family: monospace;
+            }
+            .flex-parent {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                align-content: flex-start;
+                height: 100vh;
+            }
         </style>
         <script src="./libs/js-yaml.min.js"></script>
         <script src="./libs/webmidi.iife.js"></script>
@@ -44,37 +51,32 @@
         <script src="./scripts/Music.js"></script>
         <script src="./scripts/Rythm.js"></script>
         <script src="./scripts/Melody.js"></script>
+        <script src="./scripts/settings.js"></script>
         <script src="./scripts/Main.js"></script>
         <script src="./scripts/index.js"></script>
     </head>
 
     <body>
-        <div>
-            <h1>Call & Response Trainer</h1>
-            <p>Figure: <span id=figure>...</span></p>
-            <p>Root: <span id=root>...</span></p>
-            <p>Tempo: <span id=tempo>...</span>BPM</p>
-            <button onclick="start();" style="width: 100px">Start</button>
-        </div>
-        <div id="settings-div">
-            <textarea id="settings" cols="90", rows="20">
-global:
-  tempo: 100
-  root: C2
-  generators:
-    - EighthNoteRythm
-    - ShortAscending
-    - KnownStartRoot
-    - KnownEndRoot
-  amountOfFigures: 100
-  activeOutputIndex: 1
-  midiProgram: 33
-figures:
-  KnownStartRoot:
-    root: A1
-    intervals: minor
-            </textarea>
-            <button onclick="resetSettingsToDefaults();" style="width: 100px">Reset</button>
+        <div class="flex-parent">
+            <div class="example-div">
+                <h1>Ear Training</h1>
+                <p>Figure: <span id=figure>...</span></p>
+                <p>Root: <span id=root>...</span></p>
+                <p>Tempo: <span id=tempo>...</span>BPM</p>
+                <button onclick="start();" style="width: 100px">Start</button>
+            </div>
+            <div id="settings-div" class="example-div">
+                <h3>Settings</h3>
+                <textarea id="settings" cols="60", rows="24">
+                </textarea>
+                <button onclick="resetSettingsToDefaults();" style="width: 100px">Reset</button>
+            </div>
+            <div class="example-div">
+                <h3>MIDI Devices</h3>
+                <ul id="midi-devices" class="midi-device">
+    
+                </ul>
+            </div>
         </div>
     </body>
 </html>

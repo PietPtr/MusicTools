@@ -55,13 +55,13 @@ class ShortAscendingFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Three note ascending figure.";
     static settings = {
-        key: "C2",
+        root: "C2",
         intervals: major
     }
 
     static generate(seed) {
         const s = ShortAscendingFigure.settings;
-        const root = note(s.key, quarter);
+        const root = note(s.root, quarter);
         let upperNotes = [choice(s.intervals), choice(s.intervals)].sort((a, b) => a - b);
         upperNotes = upperNotes.map(interval => note(root.getOffsetNumber() + interval, quarter));
         return [root, ...upperNotes];
@@ -72,14 +72,14 @@ class EighthNoteRythmFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Four note rythmic figure.";
     static settings = {
-        key: "D2"
+        root: "D2"
     }
 
     static generate(seed) {
         const durations = [quarter, quarter, eighth, eighth];
         const notes = []
         while (durations.length > 0) {
-            notes.push(note(EighthNoteRythmFigure.settings.key, takeRandom(durations)));
+            notes.push(note(EighthNoteRythmFigure.settings.root, takeRandom(durations)));
         }
 
         return notes;
