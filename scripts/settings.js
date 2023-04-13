@@ -23,6 +23,10 @@ Figures:
   Eighth note rhythm:
     Enabled: true
     Rythm note: D2
+  Random note rythm:
+    Enabled: true
+    Root: C2
+    Intervals: major
 `
 
 const translations = {
@@ -43,6 +47,8 @@ const translations = {
         "Eighth note rhythm": "EighthNoteRythm",
             "Rythm note": "root",
         "Short ascending figure": "ShortAscending",
+        "Random note rythm": "RandomRootRythm",
+            "Root": "root"
 };
 
 function translate(settings) {

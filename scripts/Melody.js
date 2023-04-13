@@ -88,10 +88,32 @@ class EighthNoteRythmFigure extends EmptyFigure {
     }
 }
 
+class RandomRootRythmFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Rythm in random note of the scale.";
+    static settings = {
+        root: "C2",
+        intervals: "major"
+    }
+
+    static generate(seed) {
+        const durations = [quarter, quarter, eighth, eighth];
+        const root = note(RandomRootRythmFigure.settings.root, quarter);
+        const offset = choice(RandomRootRythmFigure.settings.intervals);
+        const notes = []
+        while (durations.length > 0) {
+            notes.push(note(root.getOffsetNumber() + offset, takeRandom(durations)));
+        }
+
+        return notes;
+    }
+}
+
 
 const classNames = {
     "KnownStartRoot": KnownStartRootFigure,
     "KnownEndRoot": KnownEndRootFigure,
     "EighthNoteRythm": EighthNoteRythmFigure,
-    "ShortAscending": ShortAscendingFigure
+    "ShortAscending": ShortAscendingFigure,
+    "RandomRootRythm": RandomRootRythmFigure,
 }
