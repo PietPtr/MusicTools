@@ -6,6 +6,7 @@ const defaultSettings =
   Amount of figures: 100
   MIDI device index: 1
   MIDI instrument: 33
+  Clef: bass
 Figures:
   Interval with known start note:
     Enabled: true
@@ -31,6 +32,7 @@ const translations = {
         "Amount of figures": "amountOfFigures",
         "MIDI device index": "activeOutputIndex",
         "MIDI instrument": "midiProgram",
+        "Clef": "clef",
     "Figures": "figures",
         "Interval with known start note": "KnownStartRoot",
             "Enabled": "enabled",
@@ -75,7 +77,8 @@ let settings = {
     amountOfFigures: 0,
     activeOutputIndex: 0,
     rootOverride: null,
-    midiProgram: 0
+    midiProgram: 0,
+    clef: 'bass',
 }
 
 function loadSettings() {

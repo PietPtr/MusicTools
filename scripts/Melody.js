@@ -4,7 +4,9 @@
 //      given a seed and using the global tempo setting
 
 function note(pitch, duration) {
-    return new Note(pitch, {duration: noteDuration(duration), attack: 0.3});
+    const note = new Note(pitch, {duration: noteDuration(duration), attack: 0.3});
+    note.barDuration = duration;
+    return note;
 }
 
 function rest(duration) {

@@ -12,13 +12,27 @@ class UIEvent {
     }
 }
 
+class ScoreUIEvent extends UIEvent {
+    constructor(score, notes, time) {
+        super(null, null, time);
+        this.notes = notes;
+        this.score = score;
+    }
+
+    render() {
+        this.score.renderNotes(this.notes);
+    }
+}
+
 class Main {
-    constructor(startTime) {
+    constructor(startTime, score) {
         this.activeOutput = WebMidi.outputs[settings.activeOutputIndex];
         this.measure = 0;
         this.uiEvents = [];
         this.addUIEvent("tempo", settings.tempo, 0);
         this.startTime = startTime;
+        this.score = score;
+        this.figure = 1;
 
         this.activeOutput.sendProgramChange(settings.midiProgram)
     }
@@ -46,12 +60,9 @@ class Main {
         const notes = GenerateClass.generate();
 
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
-        if (GenerateClass.settings.key) {
-            this.addUIEvent("root", GenerateClass.settings.key, this.measureTime());
-        }
-        if (GenerateClass.settings.root) {
-            this.addUIEvent("root", GenerateClass.settings.root, this.measureTime());
-        }
+        this.addUIEvent("root", GenerateClass.settings.root, this.measureTime());
+        this.addUIEvent("bar", this.figure, this.measureTime());
+        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime()));
 
         let time = 0;
         for(let note of notes) {
@@ -61,6 +72,7 @@ class Main {
 
         this.queueMetronome(GenerateClass.measures * 2);
         this.measure += GenerateClass.measures * 2;
+        this.figure++;
     }
 
     queueMetronome(measures) {

@@ -14,15 +14,21 @@ function onEnabled() {
     });
 }
 
+var score = null;
+
 window.onload = () => {
     updateSettingsTextarea();
+    
+    score = new Score();
 }
 
 function start() {
+    // if already running, reload / cancel / deny
     loadSettings();
-    console.log(settings);
 
-    const main = new Main(WebMidi.time);
+    score.renderClef();
+
+    const main = new Main(WebMidi.time, score);
     main.runUI();
 
     main.queueIntroSticks();
