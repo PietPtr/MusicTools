@@ -4,7 +4,6 @@ let Player = SynthPlayer;
 WebMidi.enable()
     .then(onEnabled);
     
-
 function onEnabled() {
     midiList = document.getElementById("midi-devices");
 
@@ -37,7 +36,7 @@ async function start() {
     loadSettings();
 
     if (typeof settings.activeOutputIndex == "number") {
-        Player = MidiPlayer
+        Player = MIDIPlayer
     } else if (settings.activeOutputIndex == 'Synth') {
         Player = SynthPlayer
     } else {

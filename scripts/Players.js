@@ -16,7 +16,7 @@ class MIDIPlayer {
     }
 
     drums(midiNote, playTime) {
-        drumChannel.playNote(midiNote, {time: playTime, attack: 1});
+        this.drumChannel.playNote(midiNote, {time: playTime, attack: 1});
     }
 }
 

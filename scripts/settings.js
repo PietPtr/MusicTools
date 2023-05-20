@@ -8,14 +8,11 @@ const defaultSettings =
   MIDI instrument: 33
   Clef: bass
 Figures:
-  Interval with known start note:
+  Interval with one known note:
     Enabled: true
     Start note: C2
     Intervals: major
-  Interval with known end note:
-    Enabled: true
-    End note: C2
-    Intervals: major
+    Direction: both
   Short ascending figure:
     Enabled: true
     Start note: C2
@@ -38,12 +35,11 @@ const translations = {
         "MIDI instrument": "midiProgram",
         "Clef": "clef",
     "Figures": "figures",
-        "Interval with known start note": "KnownStartRoot",
+        "Interval with one known note": "KnownRoot",
             "Enabled": "enabled",
             "Start note": "root",
             "Intervals": "intervals",
-        "Interval with known end note": "KnownEndRoot",
-            "End note": "root",
+            "Direction": "direction",
         "Eighth note rhythm": "EighthNoteRythm",
             "Rythm note": "root",
         "Short ascending figure": "ShortAscending",
@@ -123,6 +119,11 @@ function loadSettings() {
         }
     }
 
+    saveSettings();
+}
+
+function saveSettings() {
+    const yamlText = document.getElementById("settings").value;
     localStorage.setItem("settings", yamlText);
 }
 
