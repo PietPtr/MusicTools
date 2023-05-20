@@ -49,15 +49,18 @@
                 padding: .5em;
             }
         </style>
+        <script src="./libs/tone-min.js"></script>
         <script src="./libs/js-yaml.min.js"></script>
         <script src="./libs/webmidi.iife.js"></script>
         <script src="./libs/vexflow-min.js"></script>
         <script src="./scripts/utils.js"></script>
         <script src="./scripts/Music.js"></script>
+        <script src="./scripts/Samples.js"></script>
         <script src="./scripts/Score.js"></script>
         <script src="./scripts/Rythm.js"></script>
         <script src="./scripts/Melody.js"></script>
         <script src="./scripts/settings.js"></script>
+        <script src="./scripts/Players.js"></script>
         <script src="./scripts/Main.js"></script>
         <script src="./scripts/index.js"></script>
     </head>
@@ -78,7 +81,7 @@
                 <p></p>
                 <p></p>
                 <p></p>
-                <button onclick="start();" style="width: 100px">Start</button>
+                <button onclick="start();" style="width: 100px" id="startButton">Start</button>
             </div>
             <div class="example-div">
                 <button onclick="toggleScoreVisibility()" style="width: 100px">Toggle</button>
@@ -101,6 +104,15 @@
     
                 </ul>
             </div>
+            <div class="example-div">
+                <h3>How to use</h3>
+                <p>This web-based ear trainer offers two output options: a built-in synthesizer or a connected MIDI device. The default output is the synthesizer.</p>
+                <p>Configure the ear trainer to suit your needs by modifying the YAML file under "Settings". As exercises are played, the notes for each measure can be displayed, providing a visual reference to reinforce auditory recognition.</p>
+                <p>To switch to a MIDI device, find its ID in the "MIDI Devices" list. Replace "Synth" under "MIDI device index" in the settings with this ID number.</p>
+
+
+            </div>
+            
         </div>
     </body>
 </html>

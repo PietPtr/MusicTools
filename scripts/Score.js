@@ -15,16 +15,16 @@ class Score {
         const div = document.getElementById("score");
         const renderer = new Renderer(div, Renderer.Backends.SVG);
 
-        renderer.resize(500, 200);
+        renderer.resize(500, 100);
         this.context = renderer.getContext();
 
-        this.stave = new Stave(10, 76, 400);
+        this.stave = new Stave(10, 0, 400);
         this.stave.addTimeSignature("4/4");
         this.stave.setContext(this.context).draw();
     }
 
     clear() {
-        this.context.rect(0, 0, 500, 200, { stroke: 'none', fill: 'white' });
+        this.context.rect(0, 0, 500, 100, { stroke: 'none', fill: 'white' });
     }
 
     renderClef() {
@@ -34,17 +34,10 @@ class Score {
     }
 
     // supporting multiple measures is apparently difficult-ish, so one bar for now.
-    renderNotes(noteList) {    
-        const quarterRest = "D3/w/r";
-
+    renderNotes(noteList) {
         const notes = [];
         for (let note of noteList) {
-            const accidental = note.accidental || "";
-            console.log(note.name, accidental, `${note.name.toLowerCase()}${accidental}/${note.octave + 1}`);
-            let staveNote = new Vex.StaveNote({ keys: [`${note.name.toLowerCase()}${accidental}/${note.octave + 1}`], duration: 1/note.barDuration, clef: settings.clef})
-            if (accidental != "") {
-                staveNote.addModifier(new Vex.Accidental(accidental));
-            }
+            let staveNote = new Vex.StaveNote({ keys: [`${note.name()}/${note.octave() + 1}`], duration: 1/note.duration, clef: settings.clef});
             notes.push(staveNote);
         }
         

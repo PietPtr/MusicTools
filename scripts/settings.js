@@ -4,7 +4,7 @@ const defaultSettings =
   Tempo: 100
   Root override:
   Amount of figures: 100
-  MIDI device index: 1
+  MIDI device index: Synth
   MIDI instrument: 33
   Clef: bass
 Figures:
@@ -123,7 +123,6 @@ function loadSettings() {
         }
     }
 
-    console.log("Saved settings");
     localStorage.setItem("settings", yamlText);
 }
 

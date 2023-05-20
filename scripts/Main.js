@@ -1,9 +1,10 @@
 
 class UIEvent {
-    constructor(elementID, newValue, time) {
+    constructor(elementID, newValue, time, player) {
         this.elementID = elementID;
         this.newValue = newValue;
         this.time = time;
+        this.player = player;
     }
 
     render() {
@@ -25,16 +26,14 @@ class ScoreUIEvent extends UIEvent {
 }
 
 class Main {
-    constructor(startTime, score) {
-        this.activeOutput = WebMidi.outputs[settings.activeOutputIndex];
+    constructor(score, player) {
         this.measure = 0;
         this.uiEvents = [];
         this.addUIEvent("tempo", settings.tempo, 0);
-        this.startTime = startTime;
+        this.startTime = player.now();
         this.score = score;
         this.figure = 1;
-
-        this.activeOutput.sendProgramChange(settings.midiProgram)
+        this.player = player;
     }
 
     addUIEvent(elementID, newValue, time) {
@@ -44,7 +43,7 @@ class Main {
 
     runUI() {
         window.setInterval(() => {
-            while (this.uiEvents.length > 0 && WebMidi.time > this.uiEvents[0].time) {
+            while (this.uiEvents.length > 0 && this.player.now() > this.uiEvents[0].time) {
                 this.uiEvents[0].render();
                 this.uiEvents.shift();
             }
@@ -66,8 +65,9 @@ class Main {
 
         let time = 0;
         for(let note of notes) {
-            this.activeOutput.playNote(note, {time: this.measureTime() + time});
-            time += note.duration;
+            // this.activeOutput.playNote(note, {time: this.measureTime() + time});
+            this.player.schedule(note, this.measureTime() + time);
+            time += noteDuration(note.duration);
         }
 
         this.queueMetronome(GenerateClass.measures * 2);
@@ -76,22 +76,33 @@ class Main {
     }
 
     queueMetronome(measures) {
-        const drumChannel = this.activeOutput.channels[10];
         for (let tick of metronome(measures, 4, quarter)) {
-            drumChannel.playNote(tick.midiValue, {time: this.measureTime() + tick.time, attack: 1});
+            this.player.drums(tick.midiValue, this.measureTime() + tick.time);
         }
     }
 
     queueIntroSticks() {
+        this.addUIEvent("bar", "0", this.measureTime());
+
         const ticks = metronome(2, 4, quarter);
         let i = 0;
         for (let tick of ticks) {
             if (i != 1 && i != 3) {
-                this.activeOutput.channels[10].playNote(31, {time: this.measureTime() + tick.time, attack: 1});
+                this.player.drums(31, this.measureTime() + tick.time);
             }
             i++;
         }
         this.measure += 2;
+    }
+
+    queueEndEvent() {
+        this.addUIEvent("figure", "...", this.measureTime());
+        this.addUIEvent("root", "...", this.measureTime());
+        this.addUIEvent("bar", "...", this.measureTime());
+        this.addUIEvent("tempo", "...", this.measureTime());
+
+        const startButton = document.getElementById('startButton');
+        startButton.disabled = false;
     }
 }
 
