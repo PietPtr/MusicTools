@@ -7,21 +7,18 @@ const defaultSettings =
   MIDI device index: Synth
   MIDI instrument: 33
   Clef: bass
+  Figure: Interval with one known note
 Figures:
   Interval with one known note:
-    Enabled: true
     Start note: C2
     Intervals: major
     Direction: both
   Short ascending figure:
-    Enabled: true
     Start note: C2
     Intervals: major  
   Eighth note rhythm:
-    Enabled: true
     Rythm note: D2
   Random note rythm:
-    Enabled: true
     Root: C2
     Intervals: major
 `
@@ -34,6 +31,7 @@ const translations = {
         "MIDI device index": "activeOutputIndex",
         "MIDI instrument": "midiProgram",
         "Clef": "clef",
+        "Figure": "figure",
     "Figures": "figures",
         "Interval with one known note": "KnownRoot",
             "Enabled": "enabled",
@@ -75,12 +73,12 @@ function resetSettingsToDefaults() {
 
 let settings = {
     tempo: 0, // BPM
-    figures: [],
     amountOfFigures: 0,
     activeOutputIndex: 0,
     rootOverride: null,
     midiProgram: 0,
     clef: 'bass',
+    figure: null
 }
 
 function loadSettings() {
@@ -109,15 +107,13 @@ function loadSettings() {
                     else
                         FigureClass.settings['root'] = settingValue;
                     break
-                case 'enabled':
-                    if (settingValue) {
-                        settings.figures.push(FigureClass);
-                    }
                 default:
                     FigureClass.settings[setting] = settingValue;
             }
         }
     }
+
+    settings.figure = classNames[translations[userSettings.global.figure]];
 
     saveSettings();
 }

@@ -55,7 +55,7 @@ class Main {
     }
 
     queueMeasure() {
-        const GenerateClass = choice(settings.figures);
+        const GenerateClass = settings.figure;
         const notes = GenerateClass.generate();
 
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
