@@ -78,7 +78,8 @@ let settings = {
     rootOverride: null,
     midiProgram: 0,
     clef: 'bass',
-    figure: null
+    figure: null,
+    version: 1 // increment on breaking settings change
 }
 
 function loadSettings() {
@@ -121,12 +122,13 @@ function loadSettings() {
 function saveSettings() {
     const yamlText = document.getElementById("settings").value;
     localStorage.setItem("settings", yamlText);
+    localStorage.setItem("settingsVersion", settings.version);
 }
 
 function updateSettingsTextarea() {
     const storedSettings = localStorage.getItem("settings")
     
-    if (storedSettings) {
+    if (storedSettings && localStorage.getItem("settingsVersion") == settings.version) {
         document.getElementById("settings").innerHTML = storedSettings;
     } else {
         document.getElementById("settings").innerHTML = defaultSettings;
