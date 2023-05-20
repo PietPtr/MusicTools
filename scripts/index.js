@@ -2,7 +2,7 @@
 let Player = SynthPlayer;
 
 WebMidi.enable()
-    .then(onEnabled, onNoMIDI);
+    .then(onEnabled);
     
 
 function onEnabled() {
@@ -14,16 +14,6 @@ function onEnabled() {
         midiList.appendChild(item);
     });
 
-    const item = document.createElement("li");
-    item.innerHTML = `[Synth] Tone.js Synth`;
-    midiList.appendChild(item);
-}
-
-function onNoMIDI() {
-    const midiList = document.getElementById("midi-devices");
-    const item = document.createElement("p");
-    item.innerHTML = "Failed to enable Web MIDI, using Tone.js Synth.";  
-    midiList.appendChild(item);
 }
 
 var score = null;
@@ -32,6 +22,11 @@ window.onload = () => {
     updateSettingsTextarea();
     
     score = new Score();
+
+    const midiList = document.getElementById("midi-devices");
+    const item = document.createElement("li");
+    item.innerHTML = `[Synth] Tone.js Synth`;
+    midiList.appendChild(item);
 
 }
 
