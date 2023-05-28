@@ -2,7 +2,8 @@
 const defaultSettings = 
 `Global settings:
   Tempo: 100
-  Root override:
+  Root note: C2
+  Intervals: major
   Amount of figures: 100
   MIDI device index: Synth
   MIDI instrument: 33
@@ -10,23 +11,16 @@ const defaultSettings =
   Figure: Interval with one known note
 Figures:
   Interval with one known note:
-    Start note: C2
-    Intervals: major
-    Direction: both
   Short ascending figure:
-    Start note: C2
-    Intervals: major  
   Eighth note rhythm:
-    Rythm note: D2
   Random note rythm:
-    Root: C2
-    Intervals: major
 `
 
 const translations = {
     "Global settings": "global",
         "Tempo": "tempo",
-        "Root override": "rootOverride",
+        "Root note": "root",
+        "Intervals": "intervals",
         "Amount of figures": "amountOfFigures",
         "MIDI device index": "activeOutputIndex",
         "MIDI instrument": "midiProgram",
@@ -34,15 +28,9 @@ const translations = {
         "Figure": "figure",
     "Figures": "figures",
         "Interval with one known note": "KnownRoot",
-            "Enabled": "enabled",
-            "Start note": "root",
-            "Intervals": "intervals",
-            "Direction": "direction",
         "Eighth note rhythm": "EighthNoteRythm",
-            "Rythm note": "root",
         "Short ascending figure": "ShortAscending",
         "Random note rythm": "RandomRootRythm",
-            "Root": "root"
 };
 
 function translate(settings) {
@@ -75,11 +63,12 @@ let settings = {
     tempo: 0, // BPM
     amountOfFigures: 0,
     activeOutputIndex: 0,
-    rootOverride: null,
+    root: null,
+    intervals: null,
     midiProgram: 0,
     clef: 'bass',
     figure: null,
-    version: 1 // increment on breaking settings change
+    version: 2 // increment on breaking settings change
 }
 
 function loadSettings() {
@@ -90,26 +79,12 @@ function loadSettings() {
         if (!(setting in settings)) {
             return alert(`Unknown setting '${setting}' in global.`);
         } else {
-            settings[setting] = userSettings.global[setting];
-        }
-    }
-
-    for (let figure in userSettings.figures) {
-        const FigureClass = classNames[figure];
-        for (let setting in userSettings.figures[figure]) {
-            const settingValue = userSettings.figures[figure][setting];
             switch (setting) {
                 case 'intervals':
-                    FigureClass.settings[setting] = scales[settingValue];
-                    break
-                case 'root':
-                    if (settings.rootOverride)
-                        FigureClass.settings['root'] = settings.rootOverride;
-                    else
-                        FigureClass.settings['root'] = settingValue;
+                    settings['intervals'] = scales[userSettings.global['intervals']];
                     break
                 default:
-                    FigureClass.settings[setting] = settingValue;
+                    settings[setting] = userSettings.global[setting];
             }
         }
     }

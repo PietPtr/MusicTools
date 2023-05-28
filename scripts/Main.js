@@ -43,11 +43,9 @@ class Main {
     }
 
     runUI() {
-        console.log(this.uiEvents);
         this.uiEvents.sort((a, b) => {
             return a.time - b.time;
         });
-        console.log(this.uiEvents);
 
         const timeSpan = document.getElementById("timeDebug");
         

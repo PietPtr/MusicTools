@@ -46,7 +46,7 @@ async function start() {
     
     score.clear();
     score.renderClef();
-    score.renderKeySignature(settings.figure.settings.root);
+    score.renderKeySignature(settings.root);
     score.draw();
 
     const main = new Main(score, player);

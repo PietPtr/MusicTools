@@ -54,13 +54,11 @@ class KnownRootFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Known start note, one interval."
     static settings = {
-        root: "C2",
-        intervals: major,
         direction: "up"
     }
 
     static generate(seed) {
-        const s = KnownRootFigure.settings;
+        const s = settings;
         const root = note(s.root, quarter);
         const next = note(midiValue(s.root) + choice(s.intervals), quarter);
         
@@ -78,13 +76,9 @@ class KnownRootFigure extends EmptyFigure {
 class ShortAscendingFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Three note ascending figure.";
-    static settings = {
-        root: "C2",
-        intervals: major
-    }
 
     static generate(seed) {
-        const s = ShortAscendingFigure.settings;
+        const s = settings;
         const root = note(s.root, quarter);
         let upperNotes = [choice(s.intervals), choice(s.intervals)].sort((a, b) => a - b);
         upperNotes = upperNotes.map(interval => note(midiValue(s.root) + interval, quarter));
@@ -95,15 +89,12 @@ class ShortAscendingFigure extends EmptyFigure {
 class EighthNoteRythmFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Four note rythmic figure.";
-    static settings = {
-        root: "D2"
-    }
 
     static generate(seed) {
         const durations = [quarter, quarter, eighth, eighth];
         const notes = []
         while (durations.length > 0) {
-            notes.push(note(EighthNoteRythmFigure.settings.root, takeRandom(durations)));
+            notes.push(note(settings.root, takeRandom(durations)));
         }
 
         return notes;
@@ -113,13 +104,9 @@ class EighthNoteRythmFigure extends EmptyFigure {
 class RandomRootRythmFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Rythm in random note of the scale.";
-    static settings = {
-        root: "C2",
-        intervals: "major"
-    }
 
     static generate(seed) {
-        const s = RandomRootRythmFigure.settings
+        const s = settings
         const durations = [quarter, quarter, eighth, eighth];
         const offset = choice(s.intervals);
         const notes = []
