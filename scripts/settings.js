@@ -114,46 +114,6 @@ function readSettings() {
     return settings;
 }
 
-
-const translations = {
-    "Global settings": "global",
-        "Tempo": "tempo",
-        "Root note": "root",
-        "Intervals": "intervals",
-        "Amount of figures": "amountOfFigures",
-        "MIDI device index": "activeOutputIndex",
-        "MIDI instrument": "midiProgram",
-        "Clef": "clef",
-        "Figure": "figure",
-    "Figures": "figures",
-        "Interval with one known note": "KnownRoot",
-        "Eighth note rhythm": "EighthNoteRythm",
-        "Short ascending figure": "ShortAscending",
-        "Random note rythm": "RandomRootRythm",
-};
-
-function translate(settings) {
-    function translate1(word) {
-        if (word in translations) {
-            return translations[word];
-        } else {
-            alert(`Unknown setting '${word}'.`);
-        }
-    }
-
-    const translated = {};
-
-    for (let setting in settings) {
-        if (typeof settings[setting] === 'object') {
-            translated[translate1(setting)] = translate(settings[setting]);
-        } else {
-            translated[translate1(setting)] = settings[setting];
-        }
-    }
-
-    return Object.keys(translated).length == 0 ? null : translated;
-}
-
 function resetSettingsToDefaults() {
     document.getElementById("settings").value = defaultSettings;
 }
@@ -172,8 +132,6 @@ let settings = {
 }
 
 function loadSettings() {
-    // const yamlText = document.getElementById("settings").value;
-    // const userSettings = translate(jsyaml.load(yamlText));
     const userSettings = readSettings();
     
     for (let setting in userSettings) {
@@ -203,7 +161,13 @@ function saveSettings() {
 function updateSettings() {
     let storedSettings = localStorage.getItem('settings');
     if (storedSettings) {
-        let settings = JSON.parse(storedSettings);
+        let settings = {};
+        try {
+            settings = JSON.parse(storedSettings);
+        } catch (error) {
+            console.log('Error parsing settings:', error);
+            localStorage.setItem('settings', "{}");
+        }
 
         for (let key in settings) {
             let value = settings[key];
@@ -212,7 +176,6 @@ function updateSettings() {
 
             if (input) {
                 if (input.type == 'select-one' || input.type === 'text') {
-                    console.log(value, internalToOptionValues[value])
                     input.value = internalToOptionValues[value] || value;
                 } else if (input.type === 'number') {
                     input.value = parseInt(value, 10);

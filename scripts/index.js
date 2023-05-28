@@ -9,7 +9,7 @@ function onMidiEnabled() {
 
     WebMidi.outputs.forEach((output, index) => {
         const item = document.createElement("li");
-        item.innerHTML = `[${index}] ${output.name}`;
+        item.innerHTML = `${output.name}`;
         midiList.appendChild(item);
         settingsLayout.activeOutputName.push(item.innerHTML)
     });

@@ -50,7 +50,7 @@ class Main {
         const timeSpan = document.getElementById("timeDebug");
         
         window.setInterval(() => {
-            timeSpan.innerHTML = (this.player.now() / 1000).toFixed(2);
+            // timeSpan.innerHTML = (this.player.now() / 1000).toFixed(2);
             while (this.uiEvents.length > 0 && this.player.now() > this.uiEvents[0].time) {
                 this.uiEvents[0].render();
                 this.uiEvents.shift();
@@ -67,7 +67,6 @@ class Main {
         const notes = GenerateClass.generate();
 
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
-        this.addUIEvent("root", GenerateClass.settings.root, this.measureTime());
         this.addUIEvent("bar", this.figure, this.measureTime());
         this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(), 'main'));
         this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-2), 'next'));
@@ -91,6 +90,7 @@ class Main {
 
     queueIntroSticks() {
         this.addUIEvent("bar", "0", this.measureTime());
+        this.addUIEvent("root", settings.root, this.measureTime());
 
         const ticks = metronome(2, 4, quarter);
         let i = 0;

@@ -1,7 +1,7 @@
 
 class MIDIPlayer {
     constructor() {
-        this.output = WebMidi.outputs[settings.activeOutputIndex];
+        this.output = WebMidi.outputs.filter(output => output.name == settings.activeOutputName)[0];
         this.output.sendProgramChange(settings.midiProgram)
         this.drumChannel = this.output.channels[10];
     }
