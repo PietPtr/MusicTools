@@ -2,24 +2,30 @@
 let Player = SynthPlayer;
 
 WebMidi.enable()
-    .then(onEnabled);
+    .then(onMidiEnabled, onMidiRejected);
     
-function onEnabled() {
+function onMidiEnabled() {
     midiList = document.getElementById("midi-devices");
 
     WebMidi.outputs.forEach((output, index) => {
         const item = document.createElement("li");
         item.innerHTML = `[${index}] ${output.name}`;
         midiList.appendChild(item);
+        settingsLayout.activeOutputName.push(item.innerHTML)
     });
 
+    renderSettings(settingsLayout);
+    updateSettings();
+}
+
+function onMidiRejected() {
+    renderSettings(settingsLayout);
+    updateSettings();
 }
 
 var score = null;
 
-window.onload = () => {
-    updateSettingsTextarea();
-    
+window.onload = () => {    
     score = new Score();
 
     const midiList = document.getElementById("midi-devices");
@@ -34,12 +40,10 @@ async function start() {
     
     loadSettings();
 
-    if (typeof settings.activeOutputIndex == "number") {
-        Player = MIDIPlayer
-    } else if (settings.activeOutputIndex == 'Synth') {
-        Player = SynthPlayer
+    if (settings.activeOutputName == 'Synth') {
+        Player = SynthPlayer;
     } else {
-        alert("Invalid MIDI device index (should be a number or 'Synth' for web synth).")
+        Player = MIDIPlayer;
     }
 
     const player = new Player();

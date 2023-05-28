@@ -49,6 +49,38 @@
             td {
                 padding: .5em;
             }
+            #settingsArea {
+                margin: 10px;
+                padding: 10px;
+            }
+
+            #settingsArea table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 3px;  /* Change this value to adjust space between settings */
+            }
+
+            #settingsArea label {
+                display: block;
+                margin-bottom: 1px;
+            }
+
+            #settingsArea input, #settingsArea select {
+                width: 100%;
+                padding: 4px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+                background-color: #fdfdfd;
+                margin: 0em;
+            }
+
+            #settingsArea input:focus, #settingsArea select:focus {
+                border-color: #ccc;
+                outline: none;
+                margin: 0em;
+            }
+
         </style>
         <script src="./libs/tone-min.js"></script>
         <script src="./libs/js-yaml.min.js"></script>
@@ -91,13 +123,11 @@
                     
                 </div>
             </div>
-            <div id="settings-div" class="example-div">
-                <h3>Settings</h3>
-                <textarea id="settings" cols="60", rows="24">
-                </textarea>
+            <div class="example-div">
+                <h3>Settings 2.0</h3>
+                <div id="settingsArea"></div>
                 <button onclick="resetSettingsToDefaults();" style="width: 100px">Reset</button>
                 <button onclick="saveSettings();" style="width: 100px">Save</button>
-                
             </div>
             <div class="example-div">
                 <h3>MIDI Devices</h3>
