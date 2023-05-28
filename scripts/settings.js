@@ -140,8 +140,10 @@ function loadSettings() {
         } else {
             switch (setting) {
                 case 'intervals':
-                    settings['intervals'] = scales[userSettings['intervals']];
+                    settings['intervals'] = scales[userSettings.intervals];
                     break
+                case 'activeOutputName':
+                    settings['activeOutputName'] = userSettings.activeOutputName || "Synth";
                 default:
                     settings[setting] = userSettings[setting];
             }

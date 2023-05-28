@@ -108,9 +108,8 @@ class Main {
         this.addUIEvent("root", "...", this.measureTime());
         this.addUIEvent("bar", "...", this.measureTime());
         this.addUIEvent("tempo", "...", this.measureTime());
+        this.player.drums(49, this.measureTime());
 
-        const startButton = document.getElementById('startButton');
-        startButton.disabled = false;
     }
 }
 

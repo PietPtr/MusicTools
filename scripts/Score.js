@@ -39,7 +39,7 @@ class Score {
             const y = this.staves[stave].y;
             const w = this.staves[stave].width;
             const h = this.staves[stave].height;
-            this.context.rect(x, y, w, h + 50, { stroke: 'none', fill: 'white' });
+            this.context.rect(x, y, w, h + 100, { stroke: 'none', fill: 'white' });
         } else {
             this.context.rect(0, 0, this.context.width, this.context.height, { stroke: 'none', fill: 'white' });
         }

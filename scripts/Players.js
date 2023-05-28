@@ -2,7 +2,11 @@
 class MIDIPlayer {
     constructor() {
         this.output = WebMidi.outputs.filter(output => output.name == settings.activeOutputName)[0];
-        this.output.sendProgramChange(settings.midiProgram)
+        if (!this.output) {
+            alert(`Cannot find MIDI device ${settings.activeOutputName}.`);
+        }
+        this.output.sendProgramChange(settings.midiProgram);
+        this.output.clear();
         this.drumChannel = this.output.channels[10];
     }
 
