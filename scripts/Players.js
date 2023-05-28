@@ -45,6 +45,7 @@ class SynthPlayer {
             31: "sticks",
             42: "open_hat",
             44: "closed_hat",
+            49: "cymbal"
         }
         if (midiNote in sampleMap) {
             scheduleSample(sampleMap[midiNote], playTime / 1000);
