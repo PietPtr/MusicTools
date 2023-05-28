@@ -50,7 +50,7 @@ async function start() {
     
     score.clear();
     score.renderClef();
-    score.renderKeySignature(settings.root);
+    // score.renderKeySignature(settings.root); // broken due to the modes
     score.draw();
 
     const main = new Main(score, player);

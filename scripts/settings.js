@@ -4,10 +4,13 @@ const settingsLayout = {
     figure: [
         "Interval with one known note",
         "Short ascending figure",
-        "Random note rhythm"
+        "Random note rhythm",
+        "Four note figure",
+        "Two octave exploration",
+        "Triad chords"
     ],
     root: "C2",
-    intervals: ["Major", "Minor"],
+    intervals: ["Major","Minor","Chromatic","Dorian","Phrygian","Lydian","Mixolydian","Aeolian","Locrian"],
     tempo: 100,
     amountOfFigures: 100,
     exerciseMode: ["Read along", "Listen and play back"],
@@ -31,6 +34,13 @@ const settingsLabels = {
 const optionInternalValues = {
     "Major": "major",
     "Minor": "minor",
+    "Chromatic": "chromatic",
+    "Dorian": "dorian",
+    "Phrygian": "phrygian",
+    "Lydian": "lydian",
+    "Mixolydian": "mixolydian",
+    "Aeolian": "aeolian",
+    "Locrian": "locrian",
     "Bass": "bass",
     "Treble": "treble",
     "Read along": "reading",
@@ -38,6 +48,9 @@ const optionInternalValues = {
     "Interval with one known note": "KnownRoot",
     "Short ascending figure": "ShortAscending",
     "Random note rhythm": "RandomRootRythm",
+    "Four note figure": "FourNote",
+    "Two octave exploration": "TwoOctaveExploration",
+    "Triad chords": "TriadChord"
 }
 
 const internalToOptionValues = Object.fromEntries(Object.entries(optionInternalValues).map(([key, value]) => [value, key]));

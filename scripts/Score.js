@@ -70,10 +70,9 @@ class Score {
             const accidental = note.webMidiNote.accidental || "";
             let staveNote = new Vex.StaveNote({ keys: [`${note.name().toLowerCase()}${accidental}/${note.octave() + 1}`], duration: 1/note.duration, clef: settings.clef})
 
-            // We draw key signatures now so whether accidentals are necessary requires other logic...
-            // if (accidental != "") {
-            //     staveNote.addModifier(new Vex.Accidental(accidental));
-            // }
+            if (accidental != "") {
+                staveNote.addModifier(new Vex.Accidental(accidental));
+            }
 
             notes.push(staveNote);
         }

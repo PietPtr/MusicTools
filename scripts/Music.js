@@ -16,12 +16,29 @@ const minor7th = 10;
 const major7th = 11;
 const octave = 12;
 
+const majorScaleConstruction = [2, 2, 1, 2, 2, 2, 1];
 const major = [unison, major2nd, major3rd, fourth, fifth, major6th, major7th, octave];
 const minor = [unison, major2nd, minor3rd, fourth, fifth, minor6th, minor7th, octave];
+const chromatic = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+const dorian = scanl(plus, 0, rotateArray(majorScaleConstruction, 1));
+const phrygian = scanl(plus, 0, rotateArray(majorScaleConstruction, 2));
+const lydian = scanl(plus, 0, rotateArray(majorScaleConstruction, 3));
+const mixolydian = scanl(plus, 0, rotateArray(majorScaleConstruction, 4));
+const aeolian = scanl(plus, 0, rotateArray(majorScaleConstruction, 5));
+const locrian = scanl(plus, 0, rotateArray(majorScaleConstruction, 6));
+
 
 const scales = {
     major: major,
-    minor: minor
+    minor: minor,
+    chromatic: chromatic,
+    dorian: dorian,
+    phrygian: phrygian,
+    lydian: lydian,
+    mixolydian: mixolydian,
+    aeolian: aeolian,
+    locrian: locrian
 }
 
 const sixteenth = 1/16;
