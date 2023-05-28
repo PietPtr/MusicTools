@@ -32,7 +32,6 @@ window.onload = () => {
 async function start() {
     await Tone.start();
     
-    // TODO: if already running, reload / cancel / deny
     loadSettings();
 
     if (typeof settings.activeOutputIndex == "number") {
@@ -47,16 +46,22 @@ async function start() {
     
     score.clear();
     score.renderClef();
+    score.renderKeySignature(settings.figure.settings.root);
+    score.draw();
 
     const main = new Main(score, player);
-    main.runUI();
 
+    // This whole thing should just live in main
     main.queueIntroSticks();
     for (let i = 0; i < settings.amountOfFigures; i++) {
         main.queueMeasure();
     }
+    main.uiEvents.push(new ScoreUIEvent(main.score, [], main.measureTime(-2), 'next'));
 
     main.queueEndEvent();
+    //
+
+    main.runUI();
 
     Tone.Transport.start();
 

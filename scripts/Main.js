@@ -14,14 +14,15 @@ class UIEvent {
 }
 
 class ScoreUIEvent extends UIEvent {
-    constructor(score, notes, time) {
+    constructor(score, notes, time, stave) {
         super(null, null, time);
         this.notes = notes;
         this.score = score;
+        this.stave = stave;
     }
 
     render() {
-        this.score.renderNotes(this.notes);
+        this.score.renderNotes(this.notes, this.stave);
     }
 }
 
@@ -42,7 +43,16 @@ class Main {
     }
 
     runUI() {
+        console.log(this.uiEvents);
+        this.uiEvents.sort((a, b) => {
+            return a.time - b.time;
+        });
+        console.log(this.uiEvents);
+
+        const timeSpan = document.getElementById("timeDebug");
+        
         window.setInterval(() => {
+            timeSpan.innerHTML = (this.player.now() / 1000).toFixed(2);
             while (this.uiEvents.length > 0 && this.player.now() > this.uiEvents[0].time) {
                 this.uiEvents[0].render();
                 this.uiEvents.shift();
@@ -50,8 +60,8 @@ class Main {
         }, 50);
     }
 
-    measureTime() {
-        return this.startTime + measureToTime(this.measure);
+    measureTime(offset=0) {
+        return this.startTime + measureToTime(this.measure + offset);
     }
 
     queueMeasure() {
@@ -61,11 +71,11 @@ class Main {
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
         this.addUIEvent("root", GenerateClass.settings.root, this.measureTime());
         this.addUIEvent("bar", this.figure, this.measureTime());
-        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime()));
+        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(), 'main'));
+        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-2), 'next'));
 
         let time = 0;
         for(let note of notes) {
-            // this.activeOutput.playNote(note, {time: this.measureTime() + time});
             this.player.schedule(note, this.measureTime() + time);
             time += noteDuration(note.duration);
         }

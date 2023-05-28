@@ -15,36 +15,61 @@ class Score {
         const div = document.getElementById("score");
         const renderer = new Renderer(div, Renderer.Backends.SVG);
 
-        renderer.resize(500, 200);
+        const STAVEWIDTH = 200;
+
+        renderer.resize(STAVEWIDTH * 1.3 + STAVEWIDTH + 20, 200);
         this.context = renderer.getContext();
 
-        this.stave = new Stave(10, 76, 400);
-        this.stave.addTimeSignature("4/4");
-        this.stave.setContext(this.context).draw();
+        const stave1 = new Stave(10, 76, STAVEWIDTH * 1.3);
+        stave1.addTimeSignature("4/4");
+        stave1.setContext(this.context).draw();
+
+        const staveNext = new Stave(STAVEWIDTH * 1.3 + 10, 76, STAVEWIDTH);
+        staveNext.setContext(this.context).draw();
+
+        this.staves = {
+            main: stave1, 
+            next: staveNext
+        };
     }
 
-    clear() {
-        this.context.rect(0, 0, 500, 200, { stroke: 'none', fill: 'white' });
+    clear(stave) {
+        if (stave) {
+            const x = this.staves[stave].x;
+            const y = this.staves[stave].y;
+            const w = this.staves[stave].width;
+            const h = this.staves[stave].height;
+            this.context.rect(x, y, w, h + 50, { stroke: 'none', fill: 'white' });
+        } else {
+            this.context.rect(0, 0, this.context.width, this.context.height, { stroke: 'none', fill: 'white' });
+        }
+    }
+
+    draw() {
+        this.staves.main.setContext(this.context).draw();
+        this.staves.next.setContext(this.context).draw();
     }
 
     renderClef() {
         this.clear();
-        this.stave.addClef(settings.clef);
-        this.stave.setContext(this.context).draw();
+        this.staves.main.addClef(settings.clef);
     }
 
-    // supporting multiple measures is apparently difficult-ish, so one bar for now.
-    renderNotes(noteList) {
+    renderKeySignature(root) {
+        var keySignature = new Vex.Flow.KeySignature(root.replace(/\d/g, ''));
+        keySignature.addToStave(this.staves.main);
+    }
+
+    renderNotes(noteList, staveId) {
         const notes = [];
         for (let note of noteList) {
- //         let staveNote = new Vex.StaveNote({ keys: [`${note.name()}/${note.octave() + 1}`], duration: 1/note.duration, clef: settings.clef});
- //         let staveNote = new Vex.StaveNote({ keys: [`${note.name}/${note.octave + 1}`], duration: 1/note.barDuration, clef: settings.clef});
             const accidental = note.webMidiNote.accidental || "";
-            console.log(note.name, accidental, `${note.name().toLowerCase()}${accidental}/${note.octave() + 1}`);
             let staveNote = new Vex.StaveNote({ keys: [`${note.name().toLowerCase()}${accidental}/${note.octave() + 1}`], duration: 1/note.duration, clef: settings.clef})
-            if (accidental != "") {
-                staveNote.addModifier(new Vex.Accidental(accidental));
-            }
+
+            // We draw key signatures now so whether accidentals are necessary requires other logic...
+            // if (accidental != "") {
+            //     staveNote.addModifier(new Vex.Accidental(accidental));
+            // }
 
             notes.push(staveNote);
         }
@@ -68,10 +93,11 @@ class Score {
 
         const voice = new Vex.Voice({ num_beats: 4, beat_value: 4 });
         voice.addTickables(notes);
-        new Vex.Formatter().joinVoices([voice]).format([voice], 400);
+        const formatter = new Vex.Formatter().joinVoices([voice]).format([voice], this.staves[staveId].width);
+        formatter.formatToStave([voice], this.staves[staveId]);
 
-        this.clear();
-        this.stave.setContext(this.context).draw();
-        voice.draw(this.context, this.stave);
+        this.clear(staveId);
+        this.staves[staveId].setContext(this.context).draw();
+        voice.draw(this.context, this.staves[staveId]);
     }
 }
