@@ -1,19 +1,19 @@
 const SETTINGS_DIV = "settingsArea";
 
 const settingsLayout = {
-    tempo: 100,
-    root: "C2",
-    intervals: ["Major", "Minor"],
-    amountOfFigures: 100,
-    clef: ["Bass", "Treble"],
-    midiProgram: 33,
-    activeOutputName: ["Synth"],
-    exerciseMode: ["Read along", "Listen and play back"],
     figure: [
         "Interval with one known note",
         "Short ascending figure",
         "Random note rhythm"
-    ]
+    ],
+    root: "C2",
+    intervals: ["Major", "Minor"],
+    tempo: 100,
+    amountOfFigures: 100,
+    exerciseMode: ["Read along", "Listen and play back"],
+    clef: ["Bass", "Treble"],
+    midiProgram: 33,
+    activeOutputName: ["Synth"],
 }
 
 const settingsLabels = {
@@ -37,7 +37,7 @@ const optionInternalValues = {
     "Listen and play back": "listen",
     "Interval with one known note": "KnownRoot",
     "Short ascending figure": "ShortAscending",
-    "Random note rythm": "RandomRootRythm",
+    "Random note rhythm": "RandomRootRythm",
 }
 
 const internalToOptionValues = Object.fromEntries(Object.entries(optionInternalValues).map(([key, value]) => [value, key]));
@@ -84,6 +84,7 @@ function renderSettings(settings) {
             input.value = value;
         }
         input.id = `settings_${key}`;
+        input.onchange = saveSettings;
         inputCell.appendChild(input);
 
         row.appendChild(inputCell);
@@ -115,7 +116,21 @@ function readSettings() {
 }
 
 function resetSettingsToDefaults() {
-    document.getElementById("settings").value = defaultSettings;
+    const defaultSettings = {
+        tempo: 100,
+        amountOfFigures: 100,
+        activeOutputName: "Synth",
+        root: "C2",
+        intervals: "major",
+        midiProgram: 33,
+        clef: "bass",
+        figure: "KnownRoot",
+        exerciseMode: "listen"
+    }
+    
+    localStorage.setItem('settings', JSON.stringify(defaultSettings));
+    updateSettings();
+    loadSettings();
 }
 
 let settings = {
@@ -128,7 +143,6 @@ let settings = {
     clef: 'bass',
     figure: null,
     exerciseMode: null,
-    version: 2 // increment on breaking settings change
 }
 
 function loadSettings() {

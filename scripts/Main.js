@@ -26,6 +26,17 @@ class ScoreUIEvent extends UIEvent {
     }
 }
 
+class FunctionUIEvent extends UIEvent {
+    constructor(func, time) {
+        super(null, null, time);
+        this.func = func;
+    }
+
+    render() {
+        this.func();
+    }
+}
+
 class Main {
     constructor(score, player) {
         this.measure = 0;
@@ -90,8 +101,6 @@ class Main {
             time += noteDuration(note.duration);
         }
 
-
-
         this.queueMetronome(GenerateClass.measures * this.measuresPerFigure);
         this.measure += GenerateClass.measures * this.measuresPerFigure;
         this.figure++;
@@ -125,6 +134,10 @@ class Main {
         this.addUIEvent("tempo", "...", this.measureTime());
         this.player.drums(49, this.measureTime());
 
+        this.uiEvents.push(new FunctionUIEvent(() => {
+            const startButton = document.getElementById('startButton');
+            startButton.disabled = false;
+        }, this.measureTime()));
     }
 }
 

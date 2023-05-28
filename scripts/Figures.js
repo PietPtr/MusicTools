@@ -86,20 +86,20 @@ class ShortAscendingFigure extends EmptyFigure {
     }
 }
 
-class EighthNoteRythmFigure extends EmptyFigure {
-    static measures = 1;
-    static displayName = "Four note rythmic figure.";
+// class EighthNoteRythmFigure extends EmptyFigure {
+//     static measures = 1;
+//     static displayName = "Four note rythmic figure.";
 
-    static generate(seed) {
-        const durations = [quarter, quarter, eighth, eighth];
-        const notes = []
-        while (durations.length > 0) {
-            notes.push(note(settings.root, takeRandom(durations)));
-        }
+//     static generate(seed) {
+//         const durations = [quarter, quarter, eighth, eighth];
+//         const notes = []
+//         while (durations.length > 0) {
+//             notes.push(note(settings.root, takeRandom(durations)));
+//         }
 
-        return notes;
-    }
-}
+//         return notes;
+//     }
+// }
 
 class RandomRootRythmFigure extends EmptyFigure {
     static measures = 1;
@@ -121,7 +121,6 @@ class RandomRootRythmFigure extends EmptyFigure {
 
 const classNames = {
     "KnownRoot": KnownRootFigure,
-    "EighthNoteRythm": EighthNoteRythmFigure,
     "ShortAscending": ShortAscendingFigure,
     "RandomRootRythm": RandomRootRythmFigure,
 }
