@@ -35,6 +35,8 @@ class Main {
         this.score = score;
         this.figure = 1;
         this.player = player;
+
+        this.measuresPerFigure = settings.exerciseMode == "reading" ? 1 : 2;
     }
 
     addUIEvent(elementID, newValue, time) {
@@ -62,6 +64,17 @@ class Main {
         return this.startTime + measureToTime(this.measure + offset);
     }
 
+    queueExercise() {
+        this.queueIntroSticks();
+        for (let i = 0; i < settings.amountOfFigures; i++) {
+            this.queueMeasure();
+        }
+        this.uiEvents.push(new ScoreUIEvent(this.score, [], this.measureTime(), 'main'));
+        this.uiEvents.push(new ScoreUIEvent(this.score, [], this.measureTime(-this.measuresPerFigure), 'next'));
+
+        this.queueEndEvent();
+    }
+
     queueMeasure() {
         const GenerateClass = settings.figure;
         const notes = GenerateClass.generate();
@@ -69,7 +82,7 @@ class Main {
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
         this.addUIEvent("bar", this.figure, this.measureTime());
         this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(), 'main'));
-        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-2), 'next'));
+        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-this.measuresPerFigure), 'next'));
 
         let time = 0;
         for(let note of notes) {
@@ -77,8 +90,10 @@ class Main {
             time += noteDuration(note.duration);
         }
 
-        this.queueMetronome(GenerateClass.measures * 2);
-        this.measure += GenerateClass.measures * 2;
+
+
+        this.queueMetronome(GenerateClass.measures * this.measuresPerFigure);
+        this.measure += GenerateClass.measures * this.measuresPerFigure;
         this.figure++;
     }
 

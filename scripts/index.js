@@ -56,13 +56,7 @@ async function start() {
     const main = new Main(score, player);
 
     // This whole thing should just live in main
-    main.queueIntroSticks();
-    for (let i = 0; i < settings.amountOfFigures; i++) {
-        main.queueMeasure();
-    }
-    main.uiEvents.push(new ScoreUIEvent(main.score, [], main.measureTime(-2), 'next'));
-
-    main.queueEndEvent();
+    main.queueExercise();
     //
 
     main.runUI();
