@@ -54,11 +54,7 @@ async function start() {
     score.draw();
 
     const main = new Main(score, player);
-
-    // This whole thing should just live in main
     main.queueExercise();
-    //
-
     main.runUI();
 
     Tone.Transport.start();

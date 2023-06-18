@@ -15,8 +15,8 @@ const settingsLayout = {
     amountOfFigures: 100,
     exerciseMode: ["Read along", "Listen and play back"],
     clef: ["Bass", "Treble"],
-    midiProgram: 33,
     activeOutputName: ["Synth"],
+    midiProgram: 33,
 }
 
 const settingsLabels = {

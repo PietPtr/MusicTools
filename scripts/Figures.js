@@ -119,7 +119,7 @@ class TwoOctaveExplorationFigure extends EmptyFigure {
         let direction = TwoOctaveExplorationFigure.direction;
         let degree = TwoOctaveExplorationFigure.currentNote;;
         for (let i = 0; i < 4; i++) {
-            degree += randint(0, 4) * direction;
+            degree += randint(0, 2) * direction;
             if (direction == 1 && degree > 14) {
                 degree = 14;
                 direction = -1;
