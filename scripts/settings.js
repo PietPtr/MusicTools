@@ -4,6 +4,8 @@ const settingsLayout = {
     figure: [
         "Interval with one known note",
         "Short ascending figure",
+        "Interval in key",
+        "Interval in key with random rhythm",
         "Random note rhythm",
         "Four note figure",
         "Two octave exploration",
@@ -46,6 +48,8 @@ const optionInternalValues = {
     "Read along": "reading",
     "Listen and play back": "listen",
     "Interval with one known note": "KnownRoot",
+    "Interval in key": "InKeyInterval",
+    "Interval in key with random rhythm": "InKeyRhythmicInterval",
     "Short ascending figure": "ShortAscending",
     "Random note rhythm": "RandomRootRythm",
     "Four note figure": "FourNote",

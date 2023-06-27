@@ -26,7 +26,6 @@ function note(pitch, duration) {
 }
 
 function rest(duration) {
-    // return new Note("C2", {duration: noteDuration(duration), attack: 0});
     return new CRNote("C2", duration, 0);
 }
 
@@ -71,6 +70,33 @@ class ShortAscendingFigure extends EmptyFigure {
     }
 }
 
+class InKeyIntervalFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Two quarter notes from the selected octave";
+
+    static generate() {
+        const s = settings;
+        let notes = [choice(s.intervals), choice(s.intervals)];
+        return notes.map(interval => note(midiValue(s.root) + interval, quarter));
+    }
+}
+
+class InKeyRhythmicIntervalFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "[BROKEN VIEW] Two random duration notes from the selected octave";
+
+    static generate() {
+        const s = settings;
+        const genNote = () => {
+            let interval = choice(s.intervals);
+            let duration = choice([quarter, half]);
+            return note(midiValue(s.root) + interval, duration);
+        }
+
+        return [genNote(), genNote()];
+    }
+}
+
 class RandomRootRythmFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Rythm in random note of the scale.";
@@ -107,7 +133,7 @@ class FourNoteFigure extends EmptyFigure {
 
 class TwoOctaveExplorationFigure extends EmptyFigure {
     static measures = 1;
-    static displayName = "Move up and down through two octaves of the key, by at most a fifth per step."
+    static displayName = "Move up and down through two octaves of the key, by at most a third per step."
     static currentNote = 0;
     static direction = 1;
 
@@ -164,6 +190,8 @@ class TriadChordFigure extends EmptyFigure {
 const classNames = {
     "KnownRoot": KnownRootFigure,
     "ShortAscending": ShortAscendingFigure,
+    "InKeyInterval": InKeyIntervalFigure,
+    "InKeyRhythmicInterval": InKeyRhythmicIntervalFigure,
     "RandomRootRythm": RandomRootRythmFigure,
     "FourNote": FourNoteFigure,
     "TwoOctaveExploration": TwoOctaveExplorationFigure,
