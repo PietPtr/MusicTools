@@ -51,7 +51,8 @@ class KnownRootFigure extends EmptyFigure {
     static generate() {
         const s = settings;
         const root = note(s.root, quarter);
-        const next = note(midiValue(s.root) + choice(s.intervals), quarter);
+        const [_, ...nonRootIntervals] = s.intervals
+        const next = note(midiValue(s.root) + choice(nonRootIntervals), quarter);
         
         return takeRandom([[next, root], [root, next]]);
     }
