@@ -12,7 +12,7 @@ const settingsLayout = {
         "Triad chords"
     ],
     root: "C2",
-    intervals: ["Major","Minor","Chromatic","Dorian","Phrygian","Lydian","Mixolydian","Aeolian","Locrian"],
+    intervals: ["Major","Minor","Chromatic","Dorian","Phrygian","Lydian","Mixolydian","Aeolian","Locrian", "Fourth and Fifth"],
     tempo: 100,
     amountOfFigures: 100,
     exerciseMode: ["Read along", "Listen and play back"],
@@ -43,6 +43,7 @@ const optionInternalValues = {
     "Mixolydian": "mixolydian",
     "Aeolian": "aeolian",
     "Locrian": "locrian",
+    "Fourth and Fifth": "r45",
     "Bass": "bass",
     "Treble": "treble",
     "Read along": "reading",

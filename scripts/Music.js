@@ -28,6 +28,7 @@ const mixolydian = scanl(plus, 0, rotateArray(majorScaleConstruction, 4));
 const aeolian = scanl(plus, 0, rotateArray(majorScaleConstruction, 5));
 const locrian = scanl(plus, 0, rotateArray(majorScaleConstruction, 6));
 
+const r45 = [unison, fourth, fifth];
 
 const scales = {
     major: major,
@@ -38,7 +39,8 @@ const scales = {
     lydian: lydian,
     mixolydian: mixolydian,
     aeolian: aeolian,
-    locrian: locrian
+    locrian: locrian,
+    r45: r45
 }
 
 const sixteenth = 1/16;
