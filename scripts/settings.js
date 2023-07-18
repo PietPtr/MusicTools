@@ -14,7 +14,7 @@ const settingsLayout = {
     root: "C2",
     intervals: ["Major","Minor","Chromatic","Dorian","Phrygian","Lydian","Mixolydian","Aeolian","Locrian", "Fourth and Fifth"],
     tempo: 100,
-    amountOfFigures: 100,
+    amountOfFigures: 60,
     exerciseMode: ["Read along", "Listen and play back"],
     clef: ["Bass", "Treble"],
     activeOutputName: ["Synth"],
