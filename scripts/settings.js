@@ -12,7 +12,7 @@ const settingsLayout = {
         "Triad chords"
     ],
     root: "C2",
-    intervals: ["Major","Minor","Chromatic","Dorian","Phrygian","Lydian","Mixolydian","Aeolian","Locrian", "Fourth and Fifth"],
+    intervals: ["Major","Major Pentatonic","Minor","Minor Pentatonic","Chromatic","Dorian","Phrygian","Lydian","Mixolydian","Aeolian","Locrian", "Fourth and Fifth"],
     tempo: 100,
     amountOfFigures: 60,
     exerciseMode: ["Read along", "Listen and play back"],
@@ -35,7 +35,9 @@ const settingsLabels = {
 
 const optionInternalValues = {
     "Major": "major",
+    "Major Pentatonic": "major_pentatonic",
     "Minor": "minor",
+    "Minor Pentatonic": "minor_pentatonic",
     "Chromatic": "chromatic",
     "Dorian": "dorian",
     "Phrygian": "phrygian",

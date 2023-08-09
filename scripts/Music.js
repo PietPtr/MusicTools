@@ -18,7 +18,9 @@ const octave = 12;
 
 const majorScaleConstruction = [2, 2, 1, 2, 2, 2, 1];
 const major = [unison, major2nd, major3rd, fourth, fifth, major6th, major7th, octave];
-const minor = [unison, major2nd, minor3rd, fourth, fifth, minor6th, minor7th, octave];
+const major_pentatonic = [unison, major2nd, major3rd, fifth, major6th, octave];
+const minor = [unison, minor3rd, fourth, fifth, minor7th, octave];
+const minor_pentatonic = [unison, major2nd, minor3rd, fourth, fifth, minor6th, minor7th, octave];
 const chromatic = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const dorian = scanl(plus, 0, rotateArray(majorScaleConstruction, 1));
@@ -32,7 +34,9 @@ const r45 = [unison, fourth, fifth];
 
 const scales = {
     major: major,
+    major_pentatonic: major_pentatonic, // TODO: in A, an F# seems to be played as an F on synth mode
     minor: minor,
+    minor_pentatonic: minor_pentatonic,
     chromatic: chromatic,
     dorian: dorian,
     phrygian: phrygian,
