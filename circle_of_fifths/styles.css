@@ -1,0 +1,129 @@
+:root {
+    --circle-diameter: 60vmin;
+    --key-diameter: 10vmin;
+    --radius: calc(var(--circle-diameter) / 2);
+}
+
+#circleOfFifths {
+    position: relative;
+    width: var(--circle-diameter);
+    height: var(--circle-diameter);
+    margin: var(--key-diameter) auto;
+    border: 1px solid #888888;
+    border-radius: 50%;
+}
+
+.key {
+    position: absolute;
+    width: var(--key-diameter);
+    height: var(--key-diameter);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #888888;
+    border-radius: 50%;
+    background-color: white;
+    font-size: calc(var(--key-diameter) / 2);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+
+.key span {
+    display: block;
+}
+
+.key:nth-child(1) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(0deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(0deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(2) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(30deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(30deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(3) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(60deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(60deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(4) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(90deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(90deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(5) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(120deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(120deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(6) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(150deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(150deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(7) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(180deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(180deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(8) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(210deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(210deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(9) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(240deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(240deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(10) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(270deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(270deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(11) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(300deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(300deg) - var(--key-diameter) / 2));
+}
+
+.key:nth-child(12) {
+    transform: translateX(calc(var(--radius) + var(--radius) * cos(330deg) - var(--key-diameter) / 2)) translateY(calc(var(--radius) + var(--radius) * sin(330deg) - var(--key-diameter) / 2));
+}
+
+
+.active {
+    background-color: rgb(255, 255, 182);
+}
+
+#page {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    border: 1px solid #888888;
+    border-radius: 10%;
+    margin: 1rem;
+    padding: 1rem;
+    max-width: 25%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+}
+
+.input-group label {
+    margin-bottom: 0.25rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+input,
+select,
+button {
+    padding: 0.25rem;
+    font-size: 0.9rem;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metronome with Circle of Fifths</title>
+    <link rel="stylesheet" href="pico.min.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="page">
+        <div class="container">
+            <div class="input-group">
+                <label for="bpm">BPM</label>
+                <input type="number" id="bpm" value="120">
+            </div>
+            <div class="input-group">
+                <label for="measures">Measures per Key Change</label>
+                <input type="number" id="measures" value="2">
+            </div>
+            <div class="input-group">
+                <label for="direction">Direction</label>
+                <select id="direction">
+                    <option value="1">Clockwise</option>
+                    <option value="-1">Counterclockwise</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button onclick="startMetronome()" type="button">Start</button>
+                <button onclick="stopMetronome()" type="button">Stop</button>
+            </div>
+        </div>
+        <div id="circleOfFifths"></div>
+    </div>
+    <audio id="tick">
+        <source src="tick.wav" type="audio/wav">
+    </audio>
+    <audio id="tick_accent">
+        <source src="tick_accent.wav" type="audio/wav">
+    </audio>
+</body>
+<script src="script.js"></script>
+
+</html>
