@@ -1,8 +1,3 @@
-// Figure classes
-// Contain a static settings object, 
-// A static function generate that generates a list of WebMidi.Note objects
-//      given a seed and using the global tempo setting
-
 class CRNote {
     constructor(pitch, duration, attack) {
         this.pitch = pitch;
@@ -31,7 +26,6 @@ function note(pitch, duration) {
 }
 
 function rest(duration) {
-    // return new Note("C2", {duration: noteDuration(duration), attack: 0});
     return new CRNote("C2", duration, 0);
 }
 
@@ -45,7 +39,7 @@ class EmptyFigure {
     static settings = {};
     static displayName = "No name found for figure";
 
-    static generate(seed) {
+    static generate() {
         return [];
     }
 }
@@ -53,38 +47,23 @@ class EmptyFigure {
 class KnownRootFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Known start note, one interval."
-    static settings = {
-        root: "C2",
-        intervals: major,
-        direction: "up"
-    }
 
-    static generate(seed) {
-        const s = KnownRootFigure.settings;
+    static generate() {
+        const s = settings;
         const root = note(s.root, quarter);
-        const next = note(midiValue(s.root) + choice(s.intervals), quarter);
+        const [_, ...nonRootIntervals] = s.intervals
+        const next = note(midiValue(s.root) + choice(nonRootIntervals), quarter);
         
-        switch (s.direction) {
-            case "up":
-                return [root, next];
-            case "down":
-                return [next, root];        
-            default:
-                return takeRandom([[next, root], [root, next]]);
-        }
+        return takeRandom([[next, root], [root, next]]);
     }
 }
 
 class ShortAscendingFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Three note ascending figure.";
-    static settings = {
-        root: "C2",
-        intervals: major
-    }
 
-    static generate(seed) {
-        const s = ShortAscendingFigure.settings;
+    static generate() {
+        const s = settings;
         const root = note(s.root, quarter);
         let upperNotes = [choice(s.intervals), choice(s.intervals)].sort((a, b) => a - b);
         upperNotes = upperNotes.map(interval => note(midiValue(s.root) + interval, quarter));
@@ -92,34 +71,39 @@ class ShortAscendingFigure extends EmptyFigure {
     }
 }
 
-class EighthNoteRythmFigure extends EmptyFigure {
+class InKeyIntervalFigure extends EmptyFigure {
     static measures = 1;
-    static displayName = "Four note rythmic figure.";
-    static settings = {
-        root: "D2"
-    }
+    static displayName = "Two quarter notes from the selected octave";
 
-    static generate(seed) {
-        const durations = [quarter, quarter, eighth, eighth];
-        const notes = []
-        while (durations.length > 0) {
-            notes.push(note(EighthNoteRythmFigure.settings.root, takeRandom(durations)));
+    static generate() {
+        const s = settings;
+        let notes = [choice(s.intervals), choice(s.intervals)];
+        return notes.map(interval => note(midiValue(s.root) + interval, quarter));
+    }
+}
+
+class InKeyRhythmicIntervalFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "[BROKEN VIEW] Two random duration notes from the selected octave";
+
+    static generate() {
+        const s = settings;
+        const genNote = () => {
+            let interval = choice(s.intervals);
+            let duration = choice([quarter, half]);
+            return note(midiValue(s.root) + interval, duration);
         }
 
-        return notes;
+        return [genNote(), genNote()];
     }
 }
 
 class RandomRootRythmFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Rythm in random note of the scale.";
-    static settings = {
-        root: "C2",
-        intervals: "major"
-    }
 
-    static generate(seed) {
-        const s = RandomRootRythmFigure.settings
+    static generate() {
+        const s = settings
         const durations = [quarter, quarter, eighth, eighth];
         const offset = choice(s.intervals);
         const notes = []
@@ -131,10 +115,86 @@ class RandomRootRythmFigure extends EmptyFigure {
     }
 }
 
+class FourNoteFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Four quarter notes from the scale"
+
+    static generate() {
+        const s = settings;
+        const notes = [];
+
+        for (let i = 0; i < 4; i++) {
+            const offset = choice(s.intervals);
+            notes.push(note(midiValue(s.root) + offset, quarter));
+        }
+        
+        return notes;
+    }
+}
+
+class TwoOctaveExplorationFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Move up and down through two octaves of the key, by at most a third per step."
+    static currentNote = 0;
+    static direction = 1;
+
+    static generate() {
+        const s = settings;
+
+        const notes = [];
+        
+        let direction = TwoOctaveExplorationFigure.direction;
+        let degree = TwoOctaveExplorationFigure.currentNote;;
+        for (let i = 0; i < 4; i++) {
+            degree += randint(0, 2) * direction;
+            if (direction == 1 && degree > 14) {
+                degree = 14;
+                direction = -1;
+            } else if (direction == -1 && degree < 0) {
+                degree = 0;
+                direction = 1;
+            }
+            const offset = s.intervals[degree % 7] + Math.floor(degree / 7) * 12;
+            notes.push(note(midiValue(s.root) + offset, quarter));
+        }
+
+        TwoOctaveExplorationFigure.currentNote = degree;
+        TwoOctaveExplorationFigure.direction = direction;
+
+        return notes
+    }
+}
+
+class TriadChordFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Three quarter notes from a triad in the key in any order."
+
+    static generate() {
+        const s = settings;
+        const baseDegree = randint(0, 6); // 0 = I, 1 = ii, ... 6 = vii
+        const thirdDegree = baseDegree + 2;
+        const fifthDegree = thirdDegree + 2;        
+
+        const noteValues = [
+            midiValue(s.root) + s.intervals[baseDegree % 7],
+            midiValue(s.root) + s.intervals[thirdDegree % 7],
+            midiValue(s.root) + s.intervals[fifthDegree % 7]
+        ]
+
+        const notes = noteValues.map(value => note(value, quarter));
+        
+        return shuffle(notes);
+    }
+}
+
 
 const classNames = {
     "KnownRoot": KnownRootFigure,
-    "EighthNoteRythm": EighthNoteRythmFigure,
     "ShortAscending": ShortAscendingFigure,
+    "InKeyInterval": InKeyIntervalFigure,
+    "InKeyRhythmicInterval": InKeyRhythmicIntervalFigure,
     "RandomRootRythm": RandomRootRythmFigure,
+    "FourNote": FourNoteFigure,
+    "TwoOctaveExploration": TwoOctaveExplorationFigure,
+    "TriadChord": TriadChordFigure
 }

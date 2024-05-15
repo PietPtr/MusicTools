@@ -1,8 +1,12 @@
 
 class MIDIPlayer {
     constructor() {
-        this.output = WebMidi.outputs[settings.activeOutputIndex];
-        this.output.sendProgramChange(settings.midiProgram)
+        this.output = WebMidi.outputs.filter(output => output.name == settings.activeOutputName)[0];
+        if (!this.output) {
+            alert(`Cannot find MIDI device ${settings.activeOutputName}.`);
+        }
+        this.output.sendProgramChange(settings.midiProgram);
+        this.output.clear();
         this.drumChannel = this.output.channels[10];
     }
 
@@ -41,6 +45,7 @@ class SynthPlayer {
             31: "sticks",
             42: "open_hat",
             44: "closed_hat",
+            49: "cymbal"
         }
         if (midiNote in sampleMap) {
             scheduleSample(sampleMap[midiNote], playTime / 1000);

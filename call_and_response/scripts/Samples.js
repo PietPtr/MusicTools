@@ -1,4 +1,4 @@
-const filenames = ["closed_hat.wav", "open_hat.wav", "sticks.wav"];
+const filenames = ["closed_hat.wav", "open_hat.wav", "sticks.wav", "cymbal.wav"];
 
 const players = filenames.reduce((acc, filename) => {
     const sampleName = filename.split('.')[0];

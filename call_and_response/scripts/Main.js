@@ -14,14 +14,26 @@ class UIEvent {
 }
 
 class ScoreUIEvent extends UIEvent {
-    constructor(score, notes, time) {
+    constructor(score, notes, time, stave) {
         super(null, null, time);
         this.notes = notes;
         this.score = score;
+        this.stave = stave;
     }
 
     render() {
-        this.score.renderNotes(this.notes);
+        this.score.renderNotes(this.notes, this.stave);
+    }
+}
+
+class FunctionUIEvent extends UIEvent {
+    constructor(func, time) {
+        super(null, null, time);
+        this.func = func;
+    }
+
+    render() {
+        this.func();
     }
 }
 
@@ -34,6 +46,8 @@ class Main {
         this.score = score;
         this.figure = 1;
         this.player = player;
+
+        this.measuresPerFigure = settings.exerciseMode == "reading" ? 1 : 2;
     }
 
     addUIEvent(elementID, newValue, time) {
@@ -42,7 +56,14 @@ class Main {
     }
 
     runUI() {
+        this.uiEvents.sort((a, b) => {
+            return a.time - b.time;
+        });
+
+        const timeSpan = document.getElementById("timeDebug");
+        
         window.setInterval(() => {
+            // timeSpan.innerHTML = (this.player.now() / 1000).toFixed(2);
             while (this.uiEvents.length > 0 && this.player.now() > this.uiEvents[0].time) {
                 this.uiEvents[0].render();
                 this.uiEvents.shift();
@@ -50,8 +71,19 @@ class Main {
         }, 50);
     }
 
-    measureTime() {
-        return this.startTime + measureToTime(this.measure);
+    measureTime(offset=0) {
+        return this.startTime + measureToTime(this.measure + offset);
+    }
+
+    queueExercise() {
+        this.queueIntroSticks();
+        for (let i = 0; i < settings.amountOfFigures; i++) {
+            this.queueMeasure();
+        }
+        this.uiEvents.push(new ScoreUIEvent(this.score, [], this.measureTime(), 'main'));
+        this.uiEvents.push(new ScoreUIEvent(this.score, [], this.measureTime(-this.measuresPerFigure), 'next'));
+
+        this.queueEndEvent();
     }
 
     queueMeasure() {
@@ -59,19 +91,18 @@ class Main {
         const notes = GenerateClass.generate();
 
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
-        this.addUIEvent("root", GenerateClass.settings.root, this.measureTime());
         this.addUIEvent("bar", this.figure, this.measureTime());
-        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime()));
+        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(), 'main'));
+        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-this.measuresPerFigure), 'next'));
 
         let time = 0;
         for(let note of notes) {
-            // this.activeOutput.playNote(note, {time: this.measureTime() + time});
             this.player.schedule(note, this.measureTime() + time);
             time += noteDuration(note.duration);
         }
 
-        this.queueMetronome(GenerateClass.measures * 2);
-        this.measure += GenerateClass.measures * 2;
+        this.queueMetronome(GenerateClass.measures * this.measuresPerFigure);
+        this.measure += GenerateClass.measures * this.measuresPerFigure;
         this.figure++;
     }
 
@@ -83,6 +114,7 @@ class Main {
 
     queueIntroSticks() {
         this.addUIEvent("bar", "0", this.measureTime());
+        this.addUIEvent("root", settings.root, this.measureTime());
 
         const ticks = metronome(2, 4, quarter);
         let i = 0;
@@ -100,9 +132,12 @@ class Main {
         this.addUIEvent("root", "...", this.measureTime());
         this.addUIEvent("bar", "...", this.measureTime());
         this.addUIEvent("tempo", "...", this.measureTime());
+        this.player.drums(49, this.measureTime());
 
-        const startButton = document.getElementById('startButton');
-        startButton.disabled = false;
+        this.uiEvents.push(new FunctionUIEvent(() => {
+            const startButton = document.getElementById('startButton');
+            startButton.disabled = false;
+        }, this.measureTime()));
     }
 }
 
