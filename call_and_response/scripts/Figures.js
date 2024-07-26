@@ -4,7 +4,7 @@ class CRNote {
         this.duration = duration;
         this.attack = attack;
 
-        this.webMidiNote = new Note(pitch, {duration: noteDuration(duration), attack: attack});
+        this.webMidiNote = new Note(pitch, { duration: noteDuration(duration), attack: attack });
     }
 
     name() {
@@ -22,7 +22,7 @@ class CRNote {
 
 
 function note(pitch, duration) {
-    return new CRNote(pitch, duration, 0.3);
+    return new CRNote(pitch, duration, 1.0);
 }
 
 function rest(duration) {
@@ -30,7 +30,7 @@ function rest(duration) {
 }
 
 function midiValue(noteName) {
-    const note = new Note(noteName, {duration: 1});
+    const note = new Note(noteName, { duration: 1 });
     return note.getOffsetNumber();
 }
 
@@ -53,7 +53,7 @@ class KnownRootFigure extends EmptyFigure {
         const root = note(s.root, quarter);
         const [_, ...nonRootIntervals] = s.intervals
         const next = note(midiValue(s.root) + choice(nonRootIntervals), quarter);
-        
+
         return takeRandom([[next, root], [root, next]]);
     }
 }
@@ -127,7 +127,7 @@ class FourNoteFigure extends EmptyFigure {
             const offset = choice(s.intervals);
             notes.push(note(midiValue(s.root) + offset, quarter));
         }
-        
+
         return notes;
     }
 }
@@ -142,7 +142,7 @@ class TwoOctaveExplorationFigure extends EmptyFigure {
         const s = settings;
 
         const notes = [];
-        
+
         let direction = TwoOctaveExplorationFigure.direction;
         let degree = TwoOctaveExplorationFigure.currentNote;;
         for (let i = 0; i < 4; i++) {
@@ -173,7 +173,7 @@ class TriadChordFigure extends EmptyFigure {
         const s = settings;
         const baseDegree = randint(0, 6); // 0 = I, 1 = ii, ... 6 = vii
         const thirdDegree = baseDegree + 2;
-        const fifthDegree = thirdDegree + 2;        
+        const fifthDegree = thirdDegree + 2;
 
         const noteValues = [
             midiValue(s.root) + s.intervals[baseDegree % 7],
@@ -182,7 +182,7 @@ class TriadChordFigure extends EmptyFigure {
         ]
 
         const notes = noteValues.map(value => note(value, quarter));
-        
+
         return shuffle(notes);
     }
 }

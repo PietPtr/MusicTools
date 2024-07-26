@@ -7,6 +7,7 @@ class MIDIPlayer {
         }
         this.output.sendProgramChange(settings.midiProgram);
         this.output.clear();
+        this.bassChannel = this.output.channels[1];
         this.drumChannel = this.output.channels[10];
     }
 
@@ -14,13 +15,13 @@ class MIDIPlayer {
         return WebMidi.time;
     }
 
-    schedule(crnote, playTime) {        
+    schedule(crnote, playTime) {
         // const note = new Note(crnote.pitch, {duration: noteDuration(duration), attack: attack});
-        this.output.playNote(crnote.webMidiNote, {time: playTime});
+        this.bassChannel.playNote(crnote.webMidiNote, { time: playTime });
     }
 
     drums(midiNote, playTime) {
-        this.drumChannel.playNote(midiNote, {time: playTime, attack: 1});
+        this.drumChannel.playNote(midiNote, { time: playTime, attack: 1 });
     }
 }
 
