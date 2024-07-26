@@ -12,7 +12,20 @@ const settingsLayout = {
         "Triad chords"
     ],
     root: "C2",
-    intervals: ["Major","Major Pentatonic","Minor","Minor Pentatonic","Chromatic","Dorian","Phrygian","Lydian","Mixolydian","Aeolian","Locrian", "Fourth and Fifth"],
+    intervals: [
+        "Major",
+        "Major Pentatonic",
+        "Minor",
+        "Minor Pentatonic",
+        "Chromatic",
+        "Dorian",
+        "Phrygian",
+        "Lydian",
+        "Mixolydian",
+        "Aeolian",
+        "Locrian",
+        "Fourth and Fifth",
+        "Thirds"],
     tempo: 100,
     amountOfFigures: 60,
     exerciseMode: ["Read along", "Listen and play back"],
@@ -46,6 +59,7 @@ const optionInternalValues = {
     "Aeolian": "aeolian",
     "Locrian": "locrian",
     "Fourth and Fifth": "r45",
+    "Thirds": "thirds",
     "Bass": "bass",
     "Treble": "treble",
     "Read along": "reading",
@@ -147,7 +161,7 @@ function resetSettingsToDefaults() {
         figure: "KnownRoot",
         exerciseMode: "listen"
     }
-    
+
     localStorage.setItem('settings', JSON.stringify(defaultSettings));
     updateSettings();
     loadSettings();
@@ -167,7 +181,7 @@ let settings = {
 
 function loadSettings() {
     const userSettings = readSettings();
-    
+
     for (let setting in userSettings) {
         if (!(setting in settings)) {
             return alert(`Unknown setting '${setting}'.`);
