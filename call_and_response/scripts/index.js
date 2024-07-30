@@ -3,7 +3,7 @@ let Player = SynthPlayer;
 
 WebMidi.enable()
     .then(onMidiEnabled, onMidiRejected);
-    
+
 function onMidiEnabled() {
     midiList = document.getElementById("midi-devices");
 
@@ -25,7 +25,7 @@ function onMidiRejected() {
 
 var score = null;
 
-window.onload = () => {    
+window.onload = () => {
     score = new Score();
 
     const midiList = document.getElementById("midi-devices");
@@ -37,7 +37,7 @@ window.onload = () => {
 
 async function start() {
     await Tone.start();
-    
+
     loadSettings();
 
     if (settings.activeOutputName == 'Synth') {
@@ -47,10 +47,12 @@ async function start() {
     }
 
     const player = new Player();
-    
+
     score.clear();
+    score.destruct();
+    score = new Score();
     score.renderClef();
-    // score.renderKeySignature(settings.root); // broken due to the modes
+    score.renderKeySignature(settings.root, settings.scale);
     score.draw();
 
     const main = new Main(score, player);

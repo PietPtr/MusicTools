@@ -189,6 +189,7 @@ function loadSettings() {
             switch (setting) {
                 case 'intervals':
                     settings['intervals'] = scales[userSettings.intervals];
+                    settings['scale'] = userSettings.intervals;
                     break
                 case 'activeOutputName':
                     settings['activeOutputName'] = userSettings.activeOutputName || "Synth";

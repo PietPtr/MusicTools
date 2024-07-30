@@ -28,11 +28,19 @@ class Score {
         staveNext.setContext(this.context).draw();
 
         this.staves = {
-            main: stave1, 
+            main: stave1,
             next: staveNext
         };
 
-        this.drawnClef = false;
+        this.useFlats = false;
+    }
+
+    destruct() {
+        const div = document.getElementById("score");
+
+        while (div.firstChild) {
+            div.removeChild(div.firstChild);
+        }
     }
 
     clear(stave) {
@@ -53,14 +61,44 @@ class Score {
     }
 
     renderClef() {
-        if (!this.drawnClef) {
-            this.clear();
-            this.staves.main.addClef(settings.clef);
-        }
+        this.staves.main.addClef(settings.clef);
     }
 
-    renderKeySignature(root) {
-        var keySignature = new Vex.Flow.KeySignature(root.replace(/\d/g, ''));
+    renderKeySignature(root, scale) {
+        console.log(root);
+        console.log(`scale=${scale}`);
+        var root_note_id = new Note(root).number;
+
+        var offset = 0;
+        switch (scale) {
+            case 'lydian':
+                offset = 7;
+                break;
+            case 'mixolydian':
+                offset = 5;
+                break;
+            case 'dorian':
+                offset = 11;
+                break;
+            case 'aeolian':
+                offset = 4;
+                break;
+            case 'phrygian':
+                offset = 8;
+                break;
+            case 'locrian':
+                offset = 1;
+                break;
+        }
+
+        var new_root = new Note(root_note_id + offset);
+
+        if (root.includes('b')) {
+            new_root = flatEnharmonic(new_root);
+            this.useFlats = true;
+        }
+
+        var keySignature = new Vex.Flow.KeySignature(new_root.identifier.replace(/\d/g, ''));
         keySignature.addToStave(this.staves.main);
     }
 
@@ -68,15 +106,23 @@ class Score {
         const notes = [];
         for (let note of noteList) {
             const accidental = note.webMidiNote.accidental || "";
-            let staveNote = new Vex.StaveNote({ keys: [`${note.name().toLowerCase()}${accidental}/${note.octave() + 1}`], duration: 1/note.duration, clef: settings.clef})
 
+            if (this.useFlats && accidental != "") {
+                console.log(note.webMidiNote.identifier);
+                note.webMidiNote = flatEnharmonic(note.webMidiNote);
+                console.log('flatenned', note.webMidiNote.identifier);
+            }
+
+            let staveNote = new Vex.StaveNote({ keys: [`${note.name().toLowerCase()}${accidental}/${note.octave() + 1}`], duration: 1 / note.duration, clef: settings.clef })
+
+            // TODO: doesn't always print the correct accidental
             if (accidental != "") {
                 staveNote.addModifier(new Vex.Accidental(accidental));
             }
 
             notes.push(staveNote);
         }
-        
+
         let sumNotes = () => {
             return notes.reduce((prev, cur) => {
                 return prev + 1 / (parseInt(cur.duration));
@@ -88,7 +134,7 @@ class Score {
         while (sumNotes() < 1) {
             let smallestRest = (sum, attempt) => sum % attempt == 0 ? attempt : smallestRest(sum, attempt / 2)
 
-            let rest = new Vex.StaveNote({ keys: [restNote], duration: `${1 / smallestRest(sumNotes(), 1)}r`, clef: settings.clef});
+            let rest = new Vex.StaveNote({ keys: [restNote], duration: `${1 / smallestRest(sumNotes(), 1)}r`, clef: settings.clef });
             notes.push(rest);
 
             break;

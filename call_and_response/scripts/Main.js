@@ -46,6 +46,7 @@ class Main {
         this.score = score;
         this.figure = 1;
         this.player = player;
+        this.last_notes = null;
 
         this.measuresPerFigure = settings.exerciseMode == "reading" ? 1 : 2;
     }
@@ -61,7 +62,7 @@ class Main {
         });
 
         const timeSpan = document.getElementById("timeDebug");
-        
+
         window.setInterval(() => {
             // timeSpan.innerHTML = (this.player.now() / 1000).toFixed(2);
             while (this.uiEvents.length > 0 && this.player.now() > this.uiEvents[0].time) {
@@ -71,7 +72,7 @@ class Main {
         }, 50);
     }
 
-    measureTime(offset=0) {
+    measureTime(offset = 0) {
         return this.startTime + measureToTime(this.measure + offset);
     }
 
@@ -88,7 +89,16 @@ class Main {
 
     queueMeasure() {
         const GenerateClass = settings.figure;
-        const notes = GenerateClass.generate();
+
+        let notes = GenerateClass.generate();
+        let timeout = 10;
+
+        while (JSON.stringify(notes) === JSON.stringify(this.last_notes) || timeout < 1) {
+            notes = GenerateClass.generate();
+            timeout--;
+        }
+
+        this.last_notes = notes;
 
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
         this.addUIEvent("bar", this.figure, this.measureTime());
@@ -96,7 +106,7 @@ class Main {
         this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-this.measuresPerFigure), 'next'));
 
         let time = 0;
-        for(let note of notes) {
+        for (let note of notes) {
             this.player.schedule(note, this.measureTime() + time);
             time += noteDuration(note.duration);
         }
