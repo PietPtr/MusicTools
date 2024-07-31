@@ -33,6 +33,7 @@ class Score {
         };
 
         this.useFlats = false;
+        this.key = "";
     }
 
     destruct() {
@@ -65,8 +66,8 @@ class Score {
     }
 
     renderKeySignature(root, scale) {
-        console.log(root);
-        console.log(`scale=${scale}`);
+        console.log(root, scale);
+
         var root_note_id = new Note(root).number;
 
         var offset = 0;
@@ -81,7 +82,8 @@ class Score {
                 offset = 11;
                 break;
             case 'aeolian':
-                offset = 4;
+            case 'minor':
+                offset = 3;
                 break;
             case 'phrygian':
                 offset = 8;
@@ -98,19 +100,58 @@ class Score {
             this.useFlats = true;
         }
 
+        this.key = new_root.identifier.replace(/\d/g, '');
+
         var keySignature = new Vex.Flow.KeySignature(new_root.identifier.replace(/\d/g, ''));
         keySignature.addToStave(this.staves.main);
+    }
+
+    noteIsInKey(note) {
+        switch (this.key) {
+            case "C":
+                return ["C", "D", "E", "F", "G", "A", "B"].includes(note);
+            case "G":
+                return ["G", "A", "B", "C", "D", "E", "F#"].includes(note);
+            case "D":
+                return ["D", "E", "F#", "G", "A", "B", "C#"].includes(note);
+            case "A":
+                return ["A", "B", "C#", "D", "E", "F#", "G#"].includes(note);
+            case "E":
+                return ["E", "F#", "G#", "A", "B", "C#", "D#"].includes(note);
+            case "B":
+                return ["B", "C#", "D#", "E", "F#", "G#", "A#"].includes(note);
+            case "F#":
+                return ["F#", "G#", "A#", "B", "C#", "D#", "E#"].includes(note);
+            case "Gb":
+                return ["Gb", "Ab", "Bb", "Cb", "Db", "Eb", "F"].includes(note);
+            case "Db":
+                return ["Db", "Eb", "F", "Gb", "Ab", "Bb", "C"].includes(note);
+            case "Ab":
+                return ["Ab", "Bb", "C", "Db", "Eb", "F", "G"].includes(note);
+            case "Eb":
+                return ["Eb", "F", "G", "Ab", "Bb", "C", "D"].includes(note);
+            case "Bb":
+                return ["Bb", "C", "D", "Eb", "F", "G", "A"].includes(note);
+            case "F":
+                return ["F", "G", "A", "Bb", "C", "D", "E"].includes(note);
+            default:
+                console.error(`Don't know key '${this.key}'`)
+        }
     }
 
     renderNotes(noteList, staveId) {
         const notes = [];
         for (let note of noteList) {
-            const accidental = note.webMidiNote.accidental || "";
+            var accidental = note.webMidiNote.accidental || "";
 
             if (this.useFlats && accidental != "") {
-                console.log(note.webMidiNote.identifier);
                 note.webMidiNote = flatEnharmonic(note.webMidiNote);
-                console.log('flatenned', note.webMidiNote.identifier);
+                accidental = 'b';
+            }
+
+            // note is in key, don't draw an accidental
+            if (this.noteIsInKey(note.webMidiNote.identifier.replace(/\d/g, ''))) {
+                accidental = '';
             }
 
             let staveNote = new Vex.StaveNote({ keys: [`${note.name().toLowerCase()}${accidental}/${note.octave() + 1}`], duration: 1 / note.duration, clef: settings.clef })

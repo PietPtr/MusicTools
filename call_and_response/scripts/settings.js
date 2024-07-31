@@ -11,7 +11,9 @@ const settingsLayout = {
         "Two octave exploration",
         "Triad chords"
     ],
-    root: "C2",
+    root: "C",
+    rangeBottom: "E1",
+    rangeTop: "B2",
     intervals: [
         "Major",
         "Major Pentatonic",
@@ -37,6 +39,8 @@ const settingsLayout = {
 const settingsLabels = {
     tempo: "Tempo",
     root: "Root note",
+    rangeBottom: "Lowest note",
+    rangeTop: "Highest note",
     intervals: "Scale",
     amountOfFigures: "Number of figures",
     clef: "Clef",
@@ -154,7 +158,9 @@ function resetSettingsToDefaults() {
         tempo: 100,
         amountOfFigures: 100,
         activeOutputName: "Synth",
-        root: "C2",
+        root: "C",
+        rangeBottom: "E1",
+        rangeTop: "B2",
         intervals: "major",
         midiProgram: 33,
         clef: "bass",

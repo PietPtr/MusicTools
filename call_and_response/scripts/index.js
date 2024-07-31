@@ -48,9 +48,9 @@ async function start() {
 
     const player = new Player();
 
-    score.clear();
     score.destruct();
     score = new Score();
+    score.clear();
     score.renderClef();
     score.renderKeySignature(settings.root, settings.scale);
     score.draw();
