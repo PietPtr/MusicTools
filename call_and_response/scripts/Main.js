@@ -48,7 +48,7 @@ class Main {
         this.player = player;
         this.last_notes = null;
 
-        this.measuresPerFigure = settings.exerciseMode == "reading" ? 1 : 2;
+        this.measuresPerFigure = settings.exerciseMode + 1;
     }
 
     addUIEvent(elementID, newValue, time) {
@@ -102,8 +102,11 @@ class Main {
 
         this.addUIEvent("figure", GenerateClass.displayName, this.measureTime());
         this.addUIEvent("bar", this.figure, this.measureTime());
-        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(), 'main'));
-        this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-this.measuresPerFigure), 'next'));
+
+        if (settings.renderScore) {
+            this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(), 'main'));
+            this.uiEvents.push(new ScoreUIEvent(this.score, notes, this.measureTime(-this.measuresPerFigure), 'next'));
+        }
 
         let time = 0;
         for (let note of notes) {

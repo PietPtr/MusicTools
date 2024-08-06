@@ -91,6 +91,40 @@ class ShortAscendingFigure extends EmptyFigure {
     }
 }
 
+
+class ShortAscendingWithRhythmFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Three note ascending figure with randomly chosen quarter or eighth notes.";
+
+    static getRandomNotes(N) {
+        const selected = new Set();
+        while (selected.size < 3) {
+            const randomInt = Math.floor(Math.random() * N);
+            selected.add(randomInt);
+        }
+        return Array.from(selected);
+    }
+
+    static generate() {
+        const s = settings;
+
+        if (s.notes.length <= 2) {
+            alert(`Range ${s.rangeBottom} - ${s.rangeTop} is not large enough to create 3 note ascending figure.`);
+        }
+
+        // as the start note, pick any note in the first N - 2 elements of the note list
+        const noteIndices = ShortAscendingFigure.getRandomNotes(s.notes.length).sort((a, b) => a - b);
+
+        let notes = [];
+
+        for (let noteIdx of noteIndices) {
+            notes.push(note(s.notes[noteIdx].identifier, choice([eighth, quarter])));
+        }
+
+        return notes;
+    }
+}
+
 class InKeyIntervalFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Two quarter notes from the selected range and key";
@@ -138,7 +172,7 @@ class InKeyRhythmicIntervalFigure extends EmptyFigure {
 
 class QuickSteppedMelodyFigure extends EmptyFigure {
     static measures = 1;
-    static displayName = "Eighth note melody in key with small steps.";
+    static displayName = "[BROKEN VIEW] Eighth note melody in key with small steps.";
     static lastIdx = null;
 
     static generate() {
@@ -257,6 +291,7 @@ class TriadChordFigure extends EmptyFigure {
 const classNames = {
     "KnownRoot": KnownRootFigure,
     "ShortAscending": ShortAscendingFigure,
+    "ShortAscendingWithRhythm": ShortAscendingWithRhythmFigure,
     "InKeyInterval": InKeyIntervalFigure,
     "InKeyRhythmicInterval": InKeyRhythmicIntervalFigure,
     "RandomRootRythm": RandomRootRythmFigure,

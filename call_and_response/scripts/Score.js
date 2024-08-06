@@ -89,7 +89,6 @@ class Score {
 
             let staveNote = new Vex.StaveNote({ keys: [`${note.name().toLowerCase()}${accidental}/${note.octave() + 1}`], duration: 1 / note.duration, clef: settings.clef })
 
-            // TODO: doesn't always print the correct accidental
             if (accidental != "") {
                 staveNote.addModifier(new Vex.Accidental(accidental));
             }
@@ -116,11 +115,13 @@ class Score {
 
         const voice = new Vex.Voice({ num_beats: 4, beat_value: 4 });
         voice.addTickables(notes);
+
         const formatter = new Vex.Formatter().joinVoices([voice]).format([voice], this.staves[staveId].width);
         formatter.formatToStave([voice], this.staves[staveId]);
 
         this.clear(staveId);
         this.staves[staveId].setContext(this.context).draw();
+
         voice.draw(this.context, this.staves[staveId]);
     }
 }

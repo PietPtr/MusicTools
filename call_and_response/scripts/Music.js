@@ -90,7 +90,6 @@ function noteIsInKey(key, note) {
 
 
 function rootScaleToKey(root, scale) {
-    console.log(root, scale);
 
     var root_note_id = new Note(root).number;
 

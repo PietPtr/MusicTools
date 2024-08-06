@@ -4,6 +4,7 @@ const settingsLayout = {
     figure: [
         "Interval with one known note",
         "Short ascending figure",
+        "Short ascending figure with rhythm",
         "Interval in key",
         "Interval in key with random rhythm",
         "Random note rhythm",
@@ -31,7 +32,7 @@ const settingsLayout = {
     rangeTop: "B2",
     tempo: 100,
     amountOfFigures: 60,
-    exerciseMode: ["Read along", "Listen and play back"],
+    exerciseMode: 0,
     clef: ["Bass", "Treble"],
     activeOutputName: ["Synth"],
     midiProgram: 33,
@@ -48,7 +49,7 @@ const settingsLabels = {
     midiProgram: "MIDI instrument",
     figure: "Figure",
     activeOutputName: "Output device",
-    exerciseMode: "Exercise mode"
+    exerciseMode: "Measures after figure"
 }
 
 const optionInternalValues = {
@@ -73,6 +74,7 @@ const optionInternalValues = {
     "Interval in key": "InKeyInterval",
     "Interval in key with random rhythm": "InKeyRhythmicInterval",
     "Short ascending figure": "ShortAscending",
+    "Short ascending figure with rhythm": "ShortAscendingWithRhythm",
     "Random note rhythm": "RandomRootRythm",
     "Four note figure": "FourNote",
     "Two octave exploration": "TwoOctaveExploration",
@@ -167,7 +169,7 @@ function resetSettingsToDefaults() {
         midiProgram: 33,
         clef: "bass",
         figure: "KnownRoot",
-        exerciseMode: "listen"
+        exerciseMode: 1,
     }
 
     localStorage.setItem('settings', JSON.stringify(defaultSettings));
@@ -254,6 +256,11 @@ function loadSettings() {
                     settings[setting] = userSettings[setting];
             }
         }
+    }
+
+    settings['renderScore'] = ["KnownRoot", "ShortAscending", "InKeyInterval"].includes(userSettings.figure);
+    if (!settings['renderScore']) {
+        console.error(`Not rendering figure ${userSettings.figure}, rendering is broken for this figure.`);
     }
 
     settings.figure = classNames[userSettings.figure];
