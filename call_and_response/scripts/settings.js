@@ -178,6 +178,8 @@ let settings = {
     amountOfFigures: 0,
     activeOutputName: "Synth",
     root: null,
+    rangeBottom: null,
+    rangeTop: null,
     intervals: null,
     midiProgram: 0,
     clef: 'bass',
@@ -199,6 +201,46 @@ function loadSettings() {
                     break
                 case 'activeOutputName':
                     settings['activeOutputName'] = userSettings.activeOutputName || "Synth";
+                case 'root':
+                    // Pick a root in the given range
+                    bottomNoteNumber = new Note(userSettings.rangeBottom).number;
+                    topNoteNumber = new Note(userSettings.rangeTop).number;
+
+                    var root = null;
+                    for (i = bottomNoteNumber; i <= topNoteNumber; i++) {
+                        root = new Note(i);
+                        if ((root.name + (root.accidental || "")) == userSettings.root) {
+                            break;
+                        }
+                        root = flatEnharmonic(root);
+                        if ((root.name + (root.accidental || "")) == userSettings.root) {
+                            break;
+                        }
+                    }
+
+                    if (!root) {
+                        alert(`Cannot find a ${userSettings.root} in ${userSettings.rangeBottom} - ${userSettings.rangeTop}`);
+                    }
+
+                    settings['root'] = root.identifier;
+
+                    // Fill settings['notes'] with the available notes in the key / range
+                    var notes = [];
+                    settings['key'] = rootScaleToKey(settings.root, userSettings.intervals);
+
+                    for (i = bottomNoteNumber; i <= topNoteNumber; i++) {
+                        const note = new Note(i);
+                        const notename = note.name + (note.accidental || "");
+                        const flatNote = flatEnharmonic(note);
+                        const flatNoteName = flatNote.name + (flatNote.accidental || "");
+                        if (noteIsInKey(settings['key'], notename)) {
+                            notes.push(note);
+                        } else if (noteIsInKey(settings['key'], flatNoteName)) {
+                            notes.push(flatNote);
+                        }
+                    }
+
+                    settings['notes'] = notes;
                 default:
                     settings[setting] = userSettings[setting];
             }

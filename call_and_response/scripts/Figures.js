@@ -46,7 +46,7 @@ class EmptyFigure {
 
 class KnownRootFigure extends EmptyFigure {
     static measures = 1;
-    static displayName = "Known start note, one interval."
+    static displayName = "Always start or end on root, other note is some interval above it."
 
     static generate() {
         const s = settings;
@@ -62,18 +62,38 @@ class ShortAscendingFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "Three note ascending figure.";
 
+    static getRandomNotes(N) {
+        const selected = new Set();
+        while (selected.size < 3) {
+            const randomInt = Math.floor(Math.random() * N);
+            selected.add(randomInt);
+        }
+        return Array.from(selected);
+    }
+
     static generate() {
         const s = settings;
-        const root = note(s.root, quarter);
-        let upperNotes = [choice(s.intervals), choice(s.intervals)].sort((a, b) => a - b);
-        upperNotes = upperNotes.map(interval => note(midiValue(s.root) + interval, quarter));
-        return [root, ...upperNotes];
+
+        if (s.notes.length <= 2) {
+            alert(`Range ${s.rangeBottom} - ${s.rangeTop} is not large enough to create 3 note ascending figure.`);
+        }
+
+        // as the start note, pick any note in the first N - 2 elements of the note list
+        const noteIndices = ShortAscendingFigure.getRandomNotes(s.notes.length).sort((a, b) => a - b);
+
+        let notes = [];
+
+        for (let noteIdx of noteIndices) {
+            notes.push(note(s.notes[noteIdx].identifier, quarter));
+        }
+
+        return notes;
     }
 }
 
 class InKeyIntervalFigure extends EmptyFigure {
     static measures = 1;
-    static displayName = "Two quarter notes from the selected octave";
+    static displayName = "Two quarter notes from the selected range and key";
 
     static generate() {
         const s = settings;

@@ -54,3 +54,75 @@ const eighth = 1 / 8;
 const quarter = 1 / 4;
 const half = 1 / 2;
 const whole = 1;
+
+function noteIsInKey(key, note) {
+    switch (key) {
+        case "C":
+            return ["C", "D", "E", "F", "G", "A", "B"].includes(note);
+        case "G":
+            return ["G", "A", "B", "C", "D", "E", "F#"].includes(note);
+        case "D":
+            return ["D", "E", "F#", "G", "A", "B", "C#"].includes(note);
+        case "A":
+            return ["A", "B", "C#", "D", "E", "F#", "G#"].includes(note);
+        case "E":
+            return ["E", "F#", "G#", "A", "B", "C#", "D#"].includes(note);
+        case "B":
+            return ["B", "C#", "D#", "E", "F#", "G#", "A#"].includes(note);
+        case "F#":
+            return ["F#", "G#", "A#", "B", "C#", "D#", "E#"].includes(note);
+        case "Gb":
+            return ["Gb", "Ab", "Bb", "Cb", "Db", "Eb", "F"].includes(note);
+        case "Db":
+            return ["Db", "Eb", "F", "Gb", "Ab", "Bb", "C"].includes(note);
+        case "Ab":
+            return ["Ab", "Bb", "C", "Db", "Eb", "F", "G"].includes(note);
+        case "Eb":
+            return ["Eb", "F", "G", "Ab", "Bb", "C", "D"].includes(note);
+        case "Bb":
+            return ["Bb", "C", "D", "Eb", "F", "G", "A"].includes(note);
+        case "F":
+            return ["F", "G", "A", "Bb", "C", "D", "E"].includes(note);
+        default:
+            console.error(`Don't know key '${key}'`)
+    }
+}
+
+
+function rootScaleToKey(root, scale) {
+    console.log(root, scale);
+
+    var root_note_id = new Note(root).number;
+
+    var offset = 0;
+    switch (scale) {
+        case 'lydian':
+            offset = 7;
+            break;
+        case 'mixolydian':
+            offset = 5;
+            break;
+        case 'dorian':
+            offset = 11;
+            break;
+        case 'aeolian':
+        case 'minor':
+            offset = 3;
+            break;
+        case 'phrygian':
+            offset = 8;
+            break;
+        case 'locrian':
+            offset = 1;
+            break;
+    }
+
+    var new_root = new Note(root_note_id + offset);
+
+    if (root.includes('b')) {
+        new_root = flatEnharmonic(new_root);
+        this.useFlats = true;
+    }
+
+    return new_root.identifier.replace(/\d/g, '');
+}

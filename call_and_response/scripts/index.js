@@ -1,9 +1,6 @@
 
 let Player = SynthPlayer;
 
-WebMidi.enable()
-    .then(onMidiEnabled, onMidiRejected);
-
 function onMidiEnabled() {
     midiList = document.getElementById("midi-devices");
 
@@ -32,6 +29,9 @@ window.onload = () => {
     const item = document.createElement("li");
     item.innerHTML = `[Synth] Tone.js Synth`;
     midiList.appendChild(item);
+
+    WebMidi.enable()
+        .then(onMidiEnabled, onMidiRejected);
 
 }
 
