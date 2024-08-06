@@ -103,7 +103,7 @@ function rootScaleToKey(root, scale) {
             offset = 5;
             break;
         case 'dorian':
-            offset = 11;
+            offset = 10;
             break;
         case 'aeolian':
         case 'minor':

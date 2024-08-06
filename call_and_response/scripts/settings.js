@@ -9,11 +9,10 @@ const settingsLayout = {
         "Random note rhythm",
         "Four note figure",
         "Two octave exploration",
-        "Triad chords"
+        "Triad chords",
+        "Stepped melody",
     ],
     root: "C",
-    rangeBottom: "E1",
-    rangeTop: "B2",
     intervals: [
         "Major",
         "Major Pentatonic",
@@ -28,6 +27,8 @@ const settingsLayout = {
         "Locrian",
         "Fourth and Fifth",
         "Thirds"],
+    rangeBottom: "E1",
+    rangeTop: "B2",
     tempo: 100,
     amountOfFigures: 60,
     exerciseMode: ["Read along", "Listen and play back"],
@@ -75,7 +76,8 @@ const optionInternalValues = {
     "Random note rhythm": "RandomRootRythm",
     "Four note figure": "FourNote",
     "Two octave exploration": "TwoOctaveExploration",
-    "Triad chords": "TriadChord"
+    "Triad chords": "TriadChord",
+    "Stepped melody": "QuickSteppedMelodyFigure",
 }
 
 const internalToOptionValues = Object.fromEntries(Object.entries(optionInternalValues).map(([key, value]) => [value, key]));
@@ -241,6 +243,13 @@ function loadSettings() {
                     }
 
                     settings['notes'] = notes;
+
+                    var noteString = "";
+
+                    for (let note of notes) {
+                        noteString += `${note.identifier} `;
+                    }
+                    console.log(noteString);
                 default:
                     settings[setting] = userSettings[setting];
             }

@@ -97,8 +97,24 @@ class InKeyIntervalFigure extends EmptyFigure {
 
     static generate() {
         const s = settings;
-        let notes = [choice(s.intervals), choice(s.intervals)];
-        return notes.map(interval => note(midiValue(s.root) + interval, quarter));
+
+        const selected = new Set();
+        while (selected.size < 2) {
+            if (selected.size == 1) {
+                let other_note = selected.values().next().value;
+                let note = choice(s.notes).number;
+                let diff = Math.abs(note - other_note);
+                if (diff > 0 && diff < 13) { //  Notes fall within the same octave
+                    selected.add(note);
+                }
+            } else {
+                let note = choice(s.notes).number;
+                selected.add(note);
+            }
+        }
+
+        let notes = Array.from(selected);
+        return [note(notes[0], quarter), note(notes[1], quarter)];
     }
 }
 
@@ -107,6 +123,7 @@ class InKeyRhythmicIntervalFigure extends EmptyFigure {
     static displayName = "[BROKEN VIEW] Two random duration notes from the selected octave";
 
     static generate() {
+        // TODO: use the given range
         const s = settings;
         const genNote = () => {
             let interval = choice(s.intervals);
@@ -115,6 +132,35 @@ class InKeyRhythmicIntervalFigure extends EmptyFigure {
         }
 
         return [genNote(), genNote()];
+    }
+}
+
+
+class QuickSteppedMelodyFigure extends EmptyFigure {
+    static measures = 1;
+    static displayName = "Eighth note melody in key with small steps.";
+    static lastIdx = null;
+
+    static generate() {
+        const s = settings;
+
+        let notes = [];
+
+        if (!QuickSteppedMelodyFigure.lastIdx) {
+            QuickSteppedMelodyFigure.lastIdx = randint(0, s.notes.length - 1);
+        }
+
+        let noteIdx = QuickSteppedMelodyFigure.lastIdx;
+        notes.push(note(s.notes[noteIdx].number, eighth));
+
+        for (let i = 0; i < 5; i++) {
+            noteIdx = Math.min(Math.max(noteIdx + randint(-1, 1), 0), s.notes.length - 1);
+            notes.push(note(s.notes[noteIdx].number, eighth));
+        }
+
+        QuickSteppedMelodyFigure.lastIdx = noteIdx;
+
+        return notes;
     }
 }
 
@@ -216,5 +262,6 @@ const classNames = {
     "RandomRootRythm": RandomRootRythmFigure,
     "FourNote": FourNoteFigure,
     "TwoOctaveExploration": TwoOctaveExplorationFigure,
-    "TriadChord": TriadChordFigure
+    "TriadChord": TriadChordFigure,
+    "QuickSteppedMelodyFigure": QuickSteppedMelodyFigure,
 }
