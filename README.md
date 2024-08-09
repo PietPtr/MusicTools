@@ -6,4 +6,8 @@
 
 - Show how long the currently configured exercise is going to take / will still take
 
-- Give the stepped melody more interesting rhythm options and variable length (at most 3 beats)
+- New version of the stepped melody with more interesting rhythm options and variable length (at most 3 beats)
+
+- Stepped melody hangs out for too long at the top note of the range
+
+- Start stepped melody at a known note (e.g. start of range or the lowest root)
