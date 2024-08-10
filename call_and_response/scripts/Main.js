@@ -93,7 +93,7 @@ class Main {
         let notes = GenerateClass.generate();
         let timeout = 10;
 
-        while (JSON.stringify(notes) === JSON.stringify(this.last_notes) || timeout < 1) {
+        while (JSON.stringify(notes) === JSON.stringify(this.last_notes) && timeout >= 1) {
             notes = GenerateClass.generate();
             timeout--;
         }

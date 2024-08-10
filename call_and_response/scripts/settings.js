@@ -259,6 +259,7 @@ function loadSettings() {
     }
 
     settings['renderScore'] = ["KnownRoot", "ShortAscending", "InKeyInterval"].includes(userSettings.figure);
+    settings['renderScore'] = true; //["KnownRoot", "ShortAscending", "InKeyInterval"].includes(userSettings.figure);
     if (!settings['renderScore']) {
         console.error(`Not rendering figure ${userSettings.figure}, rendering is broken for this figure.`);
     }

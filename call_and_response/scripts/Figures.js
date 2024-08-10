@@ -173,26 +173,40 @@ class InKeyRhythmicIntervalFigure extends EmptyFigure {
 class QuickSteppedMelodyFigure extends EmptyFigure {
     static measures = 1;
     static displayName = "[BROKEN VIEW] Eighth note melody in key with small steps.";
-    static lastIdx = null;
+    static lastIdx = -1;
+    static direction = 1;
+
+    static next_note() {
+        if (QuickSteppedMelodyFigure.direction == -1) {
+            if (QuickSteppedMelodyFigure.lastIdx == 0) {
+                QuickSteppedMelodyFigure.direction = 1;
+            } else {
+                let offset = choice([0, 1, -1, -1, -1]);
+                QuickSteppedMelodyFigure.lastIdx = Math.min(Math.max(0, QuickSteppedMelodyFigure.lastIdx + offset), settings.notes.length - 1);
+            }
+        } else {
+            if (QuickSteppedMelodyFigure.lastIdx == settings.notes.length - 1) {
+                QuickSteppedMelodyFigure.direction = -1;
+            } else {
+                let offset = choice([0, 1, 1, 1, -1]);
+                QuickSteppedMelodyFigure.lastIdx = Math.min(Math.max(0, QuickSteppedMelodyFigure.lastIdx + offset), settings.notes.length - 1);
+            }
+        }
+        console.log(QuickSteppedMelodyFigure.lastIdx);
+
+        return QuickSteppedMelodyFigure.lastIdx;
+    }
 
     static generate() {
         const s = settings;
 
         let notes = [];
 
-        if (!QuickSteppedMelodyFigure.lastIdx) {
-            QuickSteppedMelodyFigure.lastIdx = randint(0, s.notes.length - 1);
-        }
-
-        let noteIdx = QuickSteppedMelodyFigure.lastIdx;
-        notes.push(note(s.notes[noteIdx].number, eighth));
+        notes.push(note(s.notes[QuickSteppedMelodyFigure.next_note()].number, eighth));
 
         for (let i = 0; i < 5; i++) {
-            noteIdx = Math.min(Math.max(noteIdx + randint(-1, 1), 0), s.notes.length - 1);
-            notes.push(note(s.notes[noteIdx].number, eighth));
+            notes.push(note(s.notes[QuickSteppedMelodyFigure.next_note()].number, eighth));
         }
-
-        QuickSteppedMelodyFigure.lastIdx = noteIdx;
 
         return notes;
     }
